@@ -1,6 +1,6 @@
 # javaBaseStudy
 
-[![java](https://img.shields.io/badge/JAVA-1.8+-green.svg)](#1  java-proxy)
+[![java](https://img.shields.io/badge/JAVA-1.8+-green.svg)](#java-proxy)
 
 ## 1  java-proxy
 
