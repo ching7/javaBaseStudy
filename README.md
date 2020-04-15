@@ -187,3 +187,11 @@ Java 序列化是 JDK 1.1 时引入的一组开创性的特性，用于将 Java 
 ## java-design-pattern
 
 Java常用设计模式介绍以及demo
+
+策略模式，工厂模式，单例模式，抽象工厂
+
+## java-8newfeature
+
+Java8新特性介绍
+
+Lambda表达式
