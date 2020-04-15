@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * @Description: note
  **/
 public class ThreadMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // 方法1
         /*ThreadDemo1 threadDemo1 = new ThreadDemo1("demo1");
         ThreadDemo1 threadDemo2 = new ThreadDemo1("demo2");
@@ -44,29 +44,29 @@ public class ThreadMain {
         //使用FutureTask来包装MyCallable对象
         FutureTask<Integer> ft = new FutureTask<Integer>(myCallable);
         //FutureTask对象作为Thread对象的target创建新的线程
-        Thread thread = new Thread(ft);
+        Thread thread1 = new Thread(ft);
         long startTime = System.currentTimeMillis();
 
         //线程进入到就绪状态
-        thread.start();
+        thread1.start();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
-
         System.out.println("主线程在执行任务");
 
         try {
             // fixme:FutureTask 的介绍补充
             //取得新创建的线程中的call()方法返回的结果
-            /*int sum = 0;
+            int sum = 0;
             // isDone不会阻塞当前线程
+            // 如果主线程花费时间大于子线程，这里判断为true，可以成功获取值，否则此处为空
             if (ft.isDone()){
                 sum = ft.get();
-            }*/
-            // get() 会阻塞当前线程
-            int sum = ft.get();
+            }
+            // get() 会阻塞Blocked当前线程，直到子线程有返回值时，才会Runnable
+            /*int sum = ft.get();*/
             System.out.println("主线程获取task运行结果,sum = " + sum);
         } catch (InterruptedException e) {
             e.printStackTrace();

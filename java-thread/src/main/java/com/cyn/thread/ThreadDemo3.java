@@ -22,6 +22,7 @@ public class ThreadDemo3 implements Callable<Integer> {
      * @return computed result
      * @throws Exception if unable to compute a result
      */
+    @Override
     public Integer call() throws Exception {
         System.out.println("子线程在进行计算");
         System.out.println("子线程:" + Thread.currentThread().getName());
