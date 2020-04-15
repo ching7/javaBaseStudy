@@ -61,11 +61,13 @@ public class ThreadMain {
             // fixme:FutureTask 的介绍补充
             //取得新创建的线程中的call()方法返回的结果
             /*int sum = 0;
+            // isDone不会阻塞当前线程
             if (ft.isDone()){
                 sum = ft.get();
             }*/
+            // get() 会阻塞当前线程
             int sum = ft.get();
-            System.out.println("task运行结果,sum = " + sum);
+            System.out.println("主线程获取task运行结果,sum = " + sum);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
