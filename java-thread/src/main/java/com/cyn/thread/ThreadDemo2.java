@@ -21,6 +21,7 @@ public class ThreadDemo2 implements Runnable {
         this.name = name;
     }
 
+    @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
             System.out.println(name + "运行  ：" + i);

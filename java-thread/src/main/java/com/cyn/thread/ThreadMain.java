@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * @Description: note
  **/
 public class ThreadMain {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         // 方法1
         /*ThreadDemo1 threadDemo1 = new ThreadDemo1("demo1");
         ThreadDemo1 threadDemo2 = new ThreadDemo1("demo2");
