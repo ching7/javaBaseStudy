@@ -319,3 +319,86 @@ Java中线程的生命周期
 
 * 守护线程应该永远不去访问固有资源，如文件、数据库，因为它会在任何时候甚至在一个操作的中间发生中断。
 
+## 线程池
+
+**线程池介绍**
+
+在web开发中，服务器需要接受并处理请求，所以会为一个请求来分配一个线程来进行处理。如果每次请求都新创建一个线程的话实现起来非常简便，但是存在一个问题：
+
+**如果并发的请求数量非常多，但每个线程执行的时间很短，这样就会频繁的创建和销毁线程，如此一来会大大降低系统的效率。可能出现服务器在为每个请求创建新线程和销毁线程上花费的时间和消耗的系统资源要比处理实际的用户请求的时间和资源更多。**
+
+那么有没有一种办法使执行完一个任务，并不被销毁，而是可以继续执行其他的任务呢？
+
+这就是线程池的目的了。线程池为线程生命周期的开销和资源不足问题提供了解决方案。通过对多个任务重用线程，线程创建的开销被分摊到了多个任务上。
+
+**什么时候使用线程池？**
+
+- 单个任务处理时间比较短
+- 需要处理的任务数量很大
+
+**使用线程池的好处**
+
+- 降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。
+- 提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。
+- 提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
+
+在`《阿里巴巴java开发手册》`中指出了线程资源必须通过线程池提供，不允许在应用中自行显示的创建线程，这样一方面是线程的创建更加规范，可以合理控制开辟线程的数量；另一方面线程的细节管理交给线程池处理，优化了资源的开销。而线程池不允许使用`Executors`去创建，而要通过`ThreadPoolExecutor`方式，这一方面是由于`jdk`中`Executor`框架虽然提供了如`newFixedThreadPool()`、`newSingleThreadExecutor()`、`newCachedThreadPool()`等创建线程池的方法，但都有其局限性，不够灵活；另外由于前面几种方法内部也是通过T`hreadPoolExecutor`方式实现，使用`ThreadPoolExecutor`有助于大家明确线程池的运行规则，创建符合自己的业务场景需要的线程池，避免资源耗尽的风险。
+
+* `ThreadPoolExecutor`
+
+  构造方法解析：
+
+  ~~~java
+  public ThreadPoolExecutor(int corePoolSize,
+                                int maximumPoolSize,
+                                long keepAliveTime,
+                                TimeUnit unit,
+                                BlockingQueue<Runnable> workQueue,
+                                ThreadFactory threadFactory,
+                                RejectedExecutionHandler handler) {
+          if (corePoolSize < 0 ||
+              maximumPoolSize <= 0 ||
+              maximumPoolSize < corePoolSize ||
+              keepAliveTime < 0)
+              throw new IllegalArgumentException();
+          if (workQueue == null || threadFactory == null || handler == null)
+              throw new NullPointerException();
+          this.acc = System.getSecurityManager() == null ?
+                  null :
+                  AccessController.getContext();
+          this.corePoolSize = corePoolSize;
+          this.maximumPoolSize = maximumPoolSize;
+          this.workQueue = workQueue;
+          this.keepAliveTime = unit.toNanos(keepAliveTime);
+          this.threadFactory = threadFactory;
+          this.handler = handler;
+      }
+  ~~~
+
+  参数解析：
+
+  ~~~properties
+  corePoolSize:指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去；
+  
+  maximumPoolSize:指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量；
+  
+  keepAliveTime:当线程池中空闲线程数量超过corePoolSize时，多余的线程会在多长时间内被销毁；
+  
+  unit:keepAliveTime的单位
+  
+  workQueue:任务队列，被添加到线程池中，但尚未被执行的任务；它一般分为直接提交队列、有界任务队列、无界任务队列、优先任务队列几种；
+  
+  threadFactory:线程工厂，用于创建线程，一般用默认即可；
+  
+  handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；
+  ~~~
+
+  * **workQueue任务队列**
+
+    * **直接提交队列**：设置为SynchronousQueue队列，SynchronousQueue是一个特殊的BlockingQueue，它没有容量，每执行一个插入操作就会阻塞，需要再执行一个删除操作才会被唤醒，反之每一个删除操作也都要等待对应的插入操作。
+
+      使用SynchronousQueue队列，提交的任务不会被保存，总是会马上提交执行。如果用于执行任务的线程数量小于maximumPoolSize，则尝试创建新的进程，如果达到maximumPoolSize设置的最大值，则根据你设置的handler执行拒绝策略。因此这种方式你提交的任务不会被缓存起来，而是会被马上执行，在这种情况下，你需要对你程序的并发量有个准确的评估，才能设置合适的maximumPoolSize数量，否则很容易就会执行拒绝策略；  
+
+    * **有界的任务队列**
+
+      使用ArrayBlockingQueue有界任务队列，若有新的任务需要执行时，线程池会创建新的线程，直到创建的线程数量达到corePoolSize时，则会将新的任务加入到等待队列中。若等待队列已满，即超过ArrayBlockingQueue初始化的容量，则继续创建线程，直到线程数量达到maximumPoolSize设置的最大线程数量，若大于maximumPoolSize，则执行拒绝策略。在这种情况下，线程数量的上限与有界任务队列的状态有直接关系，如果有界队列初始容量较大或者没有达到超负荷的状态，线程数将一直维持在corePoolSize以下，反之当任务队列已满时，则会以maximumPoolSize为最大线程数上限。
