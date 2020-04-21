@@ -58,7 +58,7 @@ public class ThreadPool {
                     }
                 });*/
         //6 自定义线程工厂
-        pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5),
+        /*pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5),
                 new ThreadFactory() {
                     @Override
                     public Thread newThread(Runnable r) {
@@ -67,9 +67,45 @@ public class ThreadPool {
                         Thread th = new Thread(r,"threadPool"+r.hashCode());
                         return th;
                     }
-                }, new ThreadPoolExecutor.CallerRunsPolicy());
+                }, new ThreadPoolExecutor.CallerRunsPolicy());*/
+        //7 ThreadPoolExecutor扩展
+        // 主要是围绕beforeExecute()、afterExecute()和terminated()三个接口实现的
+        pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5),
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        System.out.println("线程" + r.hashCode() + "创建");
+                        //线程命名
+                        Thread th = new Thread(r, "threadPool" + r.hashCode());
+                        return th;
+                    }
+                }, new ThreadPoolExecutor.CallerRunsPolicy()) {
+            @Override
+            protected void beforeExecute(Thread t, Runnable r) {
+                System.out.println("准备执行：" + ((ThreadTask) r).getTaskName());
+            }
+
+            @Override
+            protected void afterExecute(Runnable r, Throwable t) {
+                System.out.println("执行完毕：" + ((ThreadTask) r).getTaskName());
+            }
+
+            @Override
+            protected void terminated() {
+                System.out.println("线程池退出");
+            }
+        };
+        // 8 线程池数量
+        // 线程吃线程数量的设置没有一个明确的指标，根据实际情况，只要不是设置的偏大和偏小都问题不大，结合下面这个公式即可
+        /**
+         * Nthreads=CPU数量
+         * Ucpu=目标CPU的使用率，0<=Ucpu<=1
+         * W/C=任务等待时间与任务计算时间的比率
+         */
+        // Nthreads = Ncpu*Ucpu*(1+W/C)
         for (int i = 0; i < 13; i++) {
-            pool.execute(new ThreadTaskFirst(i));
+            pool.execute(new ThreadTask("Task" + i));
         }
+        pool.shutdown();
     }
 }

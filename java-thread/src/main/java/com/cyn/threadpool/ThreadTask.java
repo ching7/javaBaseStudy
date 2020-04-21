@@ -11,19 +11,22 @@ package com.cyn.threadpool;
  * @Description: note
  **/
 public class ThreadTask implements Runnable {
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
+    private String taskName;
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public ThreadTask(String name) {
+        this.setTaskName(name);
+    }
+
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName());
+        System.out.println("ThreadTask" + Thread.currentThread().getName());
     }
 }
