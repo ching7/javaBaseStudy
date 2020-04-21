@@ -323,6 +323,32 @@ Java中线程的生命周期
 
 **线程池介绍**
 
+线程池的概念是初始化线程池时在池中创建空闲的线程，一但有工作任务，可直接使用线程池中的线程进行执行工作任务，任务执行完成后又返回线程池中成为空闲线程。使用线程池可以减少线程的创建和销毁，提高性能。
+
+举个例子：我是一个包工头，代表线程池，手底下有若干工人代表线程池中的线程。如果我没接到项目，那么工人就相当于线程池中的空闲线程，一但我接到了项目，我可以立刻让我手下的工人去工作，每个工人同一时间执行只执行一个工作任务，执行完了就去
+
+执行另一个工作任务，知道没有工作任务了，这时工人就可以休息了（原谅我让工人无休止的工作），也就是又变成了线程池中的空闲线程池。
+
+**队列是什么**
+
+队列作为一个缓冲的工具，当没有足够的线程去处理任务时，可以将任务放进队列中，以队列先进先出的特性来执行工作任务
+
+举个例子，我又是一个包工头，一开始我只接了一个小项目，所以只有三个工作任务，但我手底下有四个工人，那么其中三人各领一个工作任务去执行就好了，剩下一个人就先休息。但突然我又接到了几个大项目，那么有现在有很多工作任务了，但手底下的工人不够啊。
+
+那么我有两个选择：
+
+* 雇佣更多的工人
+
+* 把工作任务记录下来，按先来后到的顺序执行
+
+但雇佣更多等工人需要成本啊，对应到计算机就是资源的不足，所以我只能把工作任务先记录下来，这样就成了一个队列了。
+
+**为什么要使用线程池**
+
+假设我又是一个包工头，我现在手底下没有工人了，但我接到了一个项目，有了工作任务要执行，那我肯定要去找工人了，但招人成本是很高的，工作完成后还要给遣散费，这样算起来好像不值，所以我事先雇佣了固定的几个工人作为我的长期员工，有工作任务就干活，没有就休息，如果工作任务实在太
+
+多，那我也可以再临时雇佣几个工人。一来二去工作效率高了，付出的成本也低了。Java自带的线程池的原理也是如此。
+
 在web开发中，服务器需要接受并处理请求，所以会为一个请求来分配一个线程来进行处理。如果每次请求都新创建一个线程的话实现起来非常简便，但是存在一个问题：
 
 **如果并发的请求数量非常多，但每个线程执行的时间很短，这样就会频繁的创建和销毁线程，如此一来会大大降低系统的效率。可能出现服务器在为每个请求创建新线程和销毁线程上花费的时间和消耗的系统资源要比处理实际的用户请求的时间和资源更多。**
@@ -395,10 +421,56 @@ Java中线程的生命周期
 
   * **workQueue任务队列**
 
-    * **直接提交队列**：设置为SynchronousQueue队列，SynchronousQueue是一个特殊的BlockingQueue，它没有容量，每执行一个插入操作就会阻塞，需要再执行一个删除操作才会被唤醒，反之每一个删除操作也都要等待对应的插入操作。
+    * **直接提交队列**
 
+      ~~~java
+  pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
+      
+  ~~~
+    
+      设置为`SynchronousQueue队列`，SynchronousQueue是一个特殊的BlockingQueue，它没有容量，每执行一个插入操作就会阻塞，需要再执行一个删除操作才会被唤醒，反之每一个删除操作也都要等待对应的插入操作。
+    
       使用SynchronousQueue队列，提交的任务不会被保存，总是会马上提交执行。如果用于执行任务的线程数量小于maximumPoolSize，则尝试创建新的进程，如果达到maximumPoolSize设置的最大值，则根据你设置的handler执行拒绝策略。因此这种方式你提交的任务不会被缓存起来，而是会被马上执行，在这种情况下，你需要对你程序的并发量有个准确的评估，才能设置合适的maximumPoolSize数量，否则很容易就会执行拒绝策略；  
-
+    
     * **有界的任务队列**
-
-      使用ArrayBlockingQueue有界任务队列，若有新的任务需要执行时，线程池会创建新的线程，直到创建的线程数量达到corePoolSize时，则会将新的任务加入到等待队列中。若等待队列已满，即超过ArrayBlockingQueue初始化的容量，则继续创建线程，直到线程数量达到maximumPoolSize设置的最大线程数量，若大于maximumPoolSize，则执行拒绝策略。在这种情况下，线程数量的上限与有界任务队列的状态有直接关系，如果有界队列初始容量较大或者没有达到超负荷的状态，线程数将一直维持在corePoolSize以下，反之当任务队列已满时，则会以maximumPoolSize为最大线程数上限。
+    
+      ```java
+      pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(10),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
+      ```
+      
+      使用`ArrayBlockingQueue有界任务队列`，若有新的任务需要执行时，线程池会创建新的线程，直到创建的线程数量达到corePoolSize时，则会将新的任务加入到等待队列中。若等待队列已满，即超过ArrayBlockingQueue初始化的容量，则继续创建线程，直到线程数量达到maximumPoolSize设置的最大线程数量，若大于maximumPoolSize，则执行拒绝策略。在这种情况下，线程数量的上限与有界任务队列的状态有直接关系，如果有界队列初始容量较大或者没有达到超负荷的状态，线程数将一直维持在corePoolSize以下，反之当任务队列已满时，则会以maximumPoolSize为最大线程数上限。
+      
+    * **无界的任务队列**
+    
+      有界任务队列可以使用`LinkedBlockingQueue`实现，如下所示
+    
+      ```java
+      pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
+      ```
+    
+      使用无界任务队列，线程池的任务队列可以无限制的添加新的任务，而线程池创建的最大线程数量就是你corePoolSize设置的数量，也就是说在这种情况下maximumPoolSize这个参数是无效的，哪怕你的任务队列中缓存了很多未执行的任务，当线程池的线程数达到corePoolSize后，就不会再增加了；若后续有新的任务加入，则直接进入队列等待，当使用这种任务队列模式时，一定要注意你任务提交与处理之间的协调与控制，不然会出现队列中的任务由于无法及时处理导致一直增长，直到最后资源耗尽的问题。
+    
+    * **优先任务队列**
+    
+      ~~~java
+      pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>(),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
+      ~~~
+    
+      除了第一个任务直接创建线程执行外，其他的任务都被放入了优先任务队列，按优先级进行了重新排列执行，且线程池的线程数一直为corePoolSize，也就是只有一个。
+    
+      通过运行的代码我们可以看出`PriorityBlockingQueue`它其实是一个特殊的无界队列，它其中无论添加了多少个任务，线程池创建的线程数也不会超过corePoolSize的数量，*只不过其他队列一般是按照先进先出的规则处理任务，而PriorityBlockingQueue队列可以自定义规则根据任务的优先级顺序先后执行。*
+    
+  * **拒绝策略**
+  
+    一般我们创建线程池时，为防止资源被耗尽，任务队列都会选择创建有界任务队列，但种模式下如果出现任务队列已满且线程池创建的线程数达到你设置的最大线程数时，这时就需要你指定ThreadPoolExecutor的RejectedExecutionHandler参数即合理的拒绝策略，来处理线程池"超载"的情况。ThreadPoolExecutor自带的拒绝策略如下:
+  
+    * AbortPolicy策略：该策略会直接抛出异常，阻止系统正常工作；**
+  
+    * CallerRunsPolicy策略：如果线程池的线程数量达到上限，该策略会把任务队列中的任务放在调用者线程当中运行；
+  
+    * DiscardOledestPolicy策略：该策略会丢弃任务队列中最老的一个任务，也就是当前任务队列中最先被添加进去的，马上要被执行的那个任务，并尝试再次提交；**
+  
+    * DiscardPolicy策略：该策略会默默丢弃无法处理的任务，不予任何处理。当然使用此策略，业务场景中需允许任务的丢失；
+    * 以上内置的策略均实现了RejectedExecutionHandler接口，当然你也可以自己扩展RejectedExecutionHandler接口，定义自己的拒绝策略
+  
+  * **ThreadFactory自定义线程创建**
