@@ -624,7 +624,26 @@ handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；
             pool.shutdown();
     ~~~
 
-    
+
+## Fork/Join框架
+
+> ForkJoinPool是ExecutorSerice的一个补充，而不是替代品
+
+通常大家说的Fork/Join框架其实就是指
+
+* 由ForkJoinPool作为线程池
+
+* ForkJoinTask(通常实现其三个抽象子类)为任务
+
+* ForkJoinWorkerThread作为执行任务的具体线程实体
+
+这三者构成的任务调度机制。
+
+ForkJoinPool 不是为了替代 ExecutorService，而是它的补充，在某些应用场景下性能比 ExecutorService 更好。
+ForkJoinPool 主要用于实现“分而治之”的算法，特别是分治之后递归调用的函数，例如 quick sort 等。
+ForkJoinPool 最适合的是计算密集型的任务，如果存在 I/O，线程间同步，sleep() 等会造成线程长时间阻塞的情况时，最好配合使用 ManagedBlocker。
+
+> AVA8中CompeleteFuture、并发流等都是基于ForkJoinPool实现；
 
 参考文章：
 

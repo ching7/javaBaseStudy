@@ -12,7 +12,7 @@ import java.util.concurrent.*;
  * @Date 2020/4/22 19:40
  * @Author: chenyn22577
  * @Version: 1.0
- * @Description: note
+ * @Description:  Executor 的适用场景，实现原理
  **/
 public class ExecutorDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
