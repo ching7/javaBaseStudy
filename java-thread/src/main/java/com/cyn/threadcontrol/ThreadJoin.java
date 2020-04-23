@@ -4,7 +4,7 @@ package com.cyn.threadcontrol;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadcontrol
  * @Date 2020/4/20 10:55
  * @Author: chenyn22577
@@ -15,8 +15,8 @@ public class ThreadJoin {
     public static void main(String[] args) throws InterruptedException {
         // 1 不加join的线程运行情况,使用实现runable接口方式
         System.out.println(Thread.currentThread().getName() + "主线程开始运行");
-        /*ThreadDemo1 threadA = new ThreadDemo1("Aa");
-        ThreadDemo1 threadB = new ThreadDemo1("Ba");
+        /*ThreadDemoByThread threadA = new ThreadDemoByThread("Aa");
+        ThreadDemoByThread threadB = new ThreadDemoByThread("Ba");
         Thread threadAa = new Thread(threadA);
         Thread threadBa = new Thread(threadB);
 

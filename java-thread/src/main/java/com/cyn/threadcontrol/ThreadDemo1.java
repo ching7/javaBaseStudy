@@ -5,7 +5,7 @@ import static java.lang.Thread.sleep;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadcontrol
  * @Date 2020/4/20 10:55
  * @Author: chenyn22577

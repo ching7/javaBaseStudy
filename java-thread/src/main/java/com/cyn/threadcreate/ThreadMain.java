@@ -1,12 +1,12 @@
-package com.cyn.thread;
+package com.cyn.threadcreate;
 
 import java.util.concurrent.*;
 
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
- * @Package: com.cyn.thread
+ * @ProjectName: java-threadcreate
+ * @Package: com.cyn.threadcreate
  * @Date 2020/4/15 15:13
  * @Author: chenyn22577
  * @Version: 1.0
@@ -15,8 +15,8 @@ import java.util.concurrent.*;
 public class ThreadMain {
     public static void main(String[] args) {
         // 方法1
-        /*ThreadDemo1 threadDemo1 = new ThreadDemo1("demo1");
-        ThreadDemo1 threadDemo2 = new ThreadDemo1("demo2");
+        /*ThreadDemoByThread threadDemo1 = new ThreadDemoByThread("demo1");
+        ThreadDemoByThread threadDemo2 = new ThreadDemoByThread("demo2");
 
         // 注意run 和start 的区别
         threadDemo1.run();
@@ -28,26 +28,26 @@ public class ThreadMain {
 
         // 方法2
         /*// 创建一个Runnable实现类的对象
-        ThreadDemo2 myRunnable = new ThreadDemo2("A");
+        ThreadDemoByRunnable myRunnable = new ThreadDemoByRunnable("A");
         // 将myRunnable作为Thread target创建新的线程
 
         Thread thread1 = new Thread(myRunnable);
-        ThreadDemo2 myRunnable1 = new ThreadDemo2("B");
+        ThreadDemoByRunnable myRunnable1 = new ThreadDemoByRunnable("B");
         // 调用start()方法使得线程进入就绪状态
         Thread thread2 = new Thread(myRunnable1);
         thread1.start();
         thread2.start();*/
 
         // 方法3
-        // 创建ThreadDemo3对象
-        Callable<Integer> myCallable = new ThreadDemo3();
-        //使用FutureTask来包装MyCallable对象
+        // 1 创建ThreadDemo3对象
+        Callable<Integer> myCallable = new ThreadDemoByCallable();
+        // 2 使用FutureTask来包装MyCallable对象
         FutureTask<Integer> ft = new FutureTask<Integer>(myCallable);
-        //FutureTask对象作为Thread对象的target创建新的线程
+        // 3 FutureTask对象作为Thread对象的target创建新的线程
         Thread thread1 = new Thread(ft);
         long startTime = System.currentTimeMillis();
 
-        //线程进入到就绪状态
+        // 4 线程进入到就绪状态
         thread1.start();
         try {
             Thread.sleep(5000);

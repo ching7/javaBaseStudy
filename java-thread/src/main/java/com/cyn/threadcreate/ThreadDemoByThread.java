@@ -1,20 +1,20 @@
-package com.cyn.thread;
+package com.cyn.threadcreate;
 
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
- * @Package: com.cyn.thread
+ * @ProjectName: java-threadcreate
+ * @Package: com.cyn.threadcreate
  * @Date 2020/4/15 14:42
  * @Author: chenyn22577
  * @Version: 1.0
  * @Description:
  * 继承Thread类，重写该类的run()方法
  **/
-public class ThreadDemo1 extends Thread {
+public class ThreadDemoByThread extends Thread {
     private String name;
 
-    public ThreadDemo1(String name){
+    public ThreadDemoByThread(String name){
         this.name = name;
     }
 

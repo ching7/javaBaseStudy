@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.Threadlevel
  * @Date 2020/4/20 16:33
  * @Author: chenyn22577
@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 public class ChildThread implements Runnable {
     /**
      * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
+     * to create a threadcreate, starting the threadcreate causes the object's
      * <code>run</code> method to be called in that separately executing
-     * thread.
+     * threadcreate.
      * <p>
      * The general contract of the method <code>run</code> is that it may
      * take any action whatsoever.
@@ -27,7 +27,7 @@ public class ChildThread implements Runnable {
     @Override
     public void run() {
         while(true){
-            System.out.println("I'm child thread..");
+            System.out.println("I'm child threadcreate..");
             try{
                 TimeUnit.MILLISECONDS.sleep(1000);
             }

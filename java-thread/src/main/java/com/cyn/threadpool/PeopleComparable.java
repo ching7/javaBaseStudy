@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadpool
  * @Date 2020/4/21 19:42
  * @Author: chenyn22577

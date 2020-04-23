@@ -1,12 +1,12 @@
-package com.cyn.thread;
+package com.cyn.threadcreate;
 
 import java.util.concurrent.Callable;
 
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
- * @Package: com.cyn.thread
+ * @ProjectName: java-threadcreate
+ * @Package: com.cyn.threadcreate
  * @Date 2020/4/15 16:13
  * @Author: chenyn22577
  * @Version: 1.0
@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
  * 具体是创建Callable接口的实现类，并实现call()方法。
  * 并使用FutureTask类来包装Callable实现类的对象，且以此FutureTask对象作为Thread对象的target来创建线程。
  **/
-public class ThreadDemo3 implements Callable<Integer> {
+public class ThreadDemoByCallable implements Callable<Integer> {
     /**
      * Computes a result, or throws an exception if unable to do so.
      *

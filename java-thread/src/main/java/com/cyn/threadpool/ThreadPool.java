@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadpool
  * @Date 2020/4/20 19:02
  * @Author: chenyn22577
@@ -57,6 +57,7 @@ public class ThreadPool {
 
                     }
                 });*/
+
         //6 自定义线程工厂
         /*pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5),
                 new ThreadFactory() {
@@ -80,20 +81,20 @@ public class ThreadPool {
                         return th;
                     }
                 }, new ThreadPoolExecutor.CallerRunsPolicy()) {
-            @Override
-            protected void beforeExecute(Thread t, Runnable r) {
-                System.out.println("准备执行：" + ((ThreadTask) r).getTaskName());
-            }
-
-            @Override
-            protected void afterExecute(Runnable r, Throwable t) {
-                System.out.println("执行完毕：" + ((ThreadTask) r).getTaskName());
-            }
-
-            @Override
-            protected void terminated() {
-                System.out.println("线程池退出");
-            }
+//            @Override
+//            protected void beforeExecute(Thread t, Runnable r) {
+//                System.out.println("准备执行：" + ((ThreadTaskByRunnable) r).getTaskName());
+//            }
+//
+//            @Override
+//            protected void afterExecute(Runnable r, Throwable t) {
+//                System.out.println("执行完毕：" + ((ThreadTaskByRunnable) r).getTaskName());
+//            }
+//
+//            @Override
+//            protected void terminated() {
+//                System.out.println("线程池退出");
+//            }
         };
         // 8 线程池数量
         // 线程池线程数量的设置没有一个明确的指标，根据实际情况，只要不是设置的偏大和偏小都问题不大，结合下面这个公式即可
@@ -104,7 +105,7 @@ public class ThreadPool {
          */
         // Nthreads = Ncpu*Ucpu*(1+W/C)
         for (int i = 0; i < 13; i++) {
-            pool.execute(new ThreadTask("Task" + i));
+            pool.execute(new ThreadTaskByRunnable("Task" + i));
         }
         pool.shutdown();
     }

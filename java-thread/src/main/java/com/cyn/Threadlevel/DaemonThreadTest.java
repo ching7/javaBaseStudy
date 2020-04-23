@@ -3,7 +3,7 @@ package com.cyn.Threadlevel;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.Threadlevel
  * @Date 2020/4/20 16:32
  * @Author: chenyn22577
@@ -21,7 +21,7 @@ public class DaemonThreadTest {
                 // 指定child为守护线程
                 //childThread.setDaemon(true);
                 childThread.start();
-                System.out.println("I'm main thread...");
+                System.out.println("I'm main threadcreate...");
             }
         });
         mainThread.start();

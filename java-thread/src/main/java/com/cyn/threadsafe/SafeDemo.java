@@ -3,7 +3,7 @@ package com.cyn.threadsafe;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadsafe
  * @Date 2020/4/20 15:54
  * @Author: chenyn22577

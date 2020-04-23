@@ -202,8 +202,6 @@ Java中线程的生命周期
   余额为：-400.0
   ~~~
 
-  
-
   对于一张只有1000余额的银行卡，你们一共可以取出1400，这显然是有问题的。
 
   ​     经过分析，问题在于Java多线程环境下的执行的不确定性。CPU可能随机的在多个处于就绪状态中的线程中进行切换，因此，很有可能出现如下情况：当thread1执行到//1处代码时，判断条件为true，此时CPU切换到thread2，执行//1处代码，发现依然为真，然后执行完thread2，接着切换到thread1，接着执行完毕。此时，就会出现上述结果。
@@ -319,6 +317,52 @@ Java中线程的生命周期
 
 * 守护线程应该永远不去访问固有资源，如文件、数据库，因为它会在任何时候甚至在一个操作的中间发生中断。
 
+## Executor框架
+
+我们知道线程池就是线程的集合，线程池集中管理线程，以实现线程的重用，降低资源消耗，提高响应速度等。线程用于执行异步任务，单个的线程既是工作单元也是执行机制，从JDK1.5开始，为了把工作单元与执行机制分离开，Executor框架诞生了，他是一个用于统一创建与运行的接口。Executor框架实现的就是线程池的功能。
+
+> 接口提供了一种优雅的方式去`解耦`任务处理机制中的`任务提交`和`任务如何运行`（也包含线程的使用，调度）
+
+重点是解耦，解耦，解耦
+
+大家比较一下两者有什么差别？很明显的可以看出来非显示创建线程的方式更优雅，我只要关心一点就是`我`把`任务交给了执行人（器）`，剩下的事情就是执行人（器）考虑的问题了，至于执行人会把我的任务`安排一个人做`还是交给`多个人做`，那是他的事情，具体的活怎么干我不关心，总结下来就是`我们不用关心执行器内部是如何运行任务的细节`
+
+**Executor框架包括3大部分：**
+
+- 任务。也就是工作单元，包括被执行任务需要实现的接口：*Runnable接口或者Callable接口*；
+
+- 任务的执行。也就是把任务分派给多个线程的执行机制，包括*Executor接口*及继承自Executor接口的*ExecutorService接口*。
+
+- 异步计算的结果。包括*Future接口*及实现了Future接口的*FutureTask类*。
+
+**Executor框架的成员及其关系可以用一下的关系图：**
+
+![](../document/images/java-executor1.jpg)
+
+**使用示意图：**
+
+![](../document/images/java-executor2.jpg)
+
+**Executor框架成员**
+
+![](../document/images/java-executor3.jpg)
+
+* Runnable和Callable接口：用于实现线程要执行的工作单元。
+
+* Executors工厂类：提供了常见配置线程池的方法，因为ThreadPoolExecutor的参数众多且意义重大，为了避免配置出错，才有了Executors工厂类。
+
+* Future接口/FutureTask实现类
+
+  一直以来都对FutureTask这个“Future”不理解，为什么叫做“未来的任务呢”？这个“Future”体现在哪里呢？现在终于明白，FutureTask的Future就源自于它的异步工作机制，如果我们在主线程中直接写一个函数来执行任务，这是同步的任务，也就是说必须要等这个函数返回以后我们才能继续做接下的事情，但是如果这个函数返回的结果对接下来的任务并没有意义，那么我们等在这里是很浪费时间的，而FutureTask就提供了这么一个异步的返回结果的机制，当执行一个FutureTask的时候，我们可以接着做别的任务，在将来的某个时间，FutureTask任务完成后会返回FutureTask对象来包装返回的结果，只要调用这个对象的get（）方法即可获取返回值。
+
+  当然多线程中继承ThreadPoolExecutor和实现Runnable也可以实现异步工作机制，可是他们没有返回值。这时可以使用FutureTask包装Runnable或者Callable对象，再使用FutureTask来执行任务。
+
+  Future接口和其唯一的实现类FutureTask类一般用于表示异步计算的结果。Future接口下提供方法来检查计算是否完成，等待其完成，并检索计算结果。 结果只能在计算完成后使用方法get进行检索，如有必要，阻塞，直到准备就绪。 取消由cancel方法执行，isCancelled方法用于检测计算是否被取消，isDone方法用于检测计算是否完成。 提供其他方法来确定任务是否正常完成或被取消。
+
+* ThreadPoolExecutor实现类、cheduledThreadPoolExecutor实现类下面详细介绍
+
+
+
 ## 线程池
 
 **线程池介绍**
@@ -368,9 +412,13 @@ Java中线程的生命周期
 - 提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。
 - 提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
 
-在`《阿里巴巴java开发手册》`中指出了线程资源必须通过线程池提供，不允许在应用中自行显示的创建线程，这样一方面是线程的创建更加规范，可以合理控制开辟线程的数量；另一方面线程的细节管理交给线程池处理，优化了资源的开销。而线程池不允许使用`Executors`去创建，而要通过`ThreadPoolExecutor`方式，这一方面是由于`jdk`中`Executor`框架虽然提供了如`newFixedThreadPool()`、`newSingleThreadExecutor()`、`newCachedThreadPool()`等创建线程池的方法，但都有其局限性，不够灵活；另外由于前面几种方法内部也是通过T`hreadPoolExecutor`方式实现，使用`ThreadPoolExecutor`有助于大家明确线程池的运行规则，创建符合自己的业务场景需要的线程池，避免资源耗尽的风险。
+在`《阿里巴巴java开发手册》`中指出了线程资源必须通过线程池提供，不允许在应用中自行显示的创建线程，这样一方面是线程的创建更加规范，可以合理控制开辟线程的数量；另一方面线程的细节管理交给线程池处理，优化了资源的开销。而线程池不允许使用`Executors`去创建，而要通过`ThreadPoolExecutor`方式，这一方面是由于`jdk`中`Executor`框架虽然提供了如`newFixedThreadPool()`、`newSingleThreadExecutor()`、`newCachedThreadPool()`等创建线程池的方法，但都有其局限性，不够灵活；另外由于前面几种方法内部也是通过`ThreadPoolExecutor`方式实现，使用`ThreadPoolExecutor`有助于大家明确线程池的运行规则，创建符合自己的业务场景需要的线程池，避免资源耗尽的风险。
 
 * `ThreadPoolExecutor`
+
+  线程池执行器，被用来解决两个不同的问题：
+> 1：`执行大量异步任务`的`性能提升`
+  > 2：提供了一种`限制和管理资源`的方式，比如`线程`，同时，也包含一些`基础统计`，如`已执行完成的任务数`等
 
   构造方法解析：
 
@@ -396,37 +444,57 @@ Java中线程的生命周期
           this.maximumPoolSize = maximumPoolSize;
           this.workQueue = workQueue;
           this.keepAliveTime = unit.toNanos(keepAliveTime);
-          this.threadFactory = threadFactory;
+        this.threadFactory = threadFactory;
           this.handler = handler;
-      }
+    }
   ~~~
 
   参数解析：
 
   ~~~properties
-  corePoolSize:指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去；
+corePoolSize:指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去；
   
-  maximumPoolSize:指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量；
+maximumPoolSize:指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量；
   
-  keepAliveTime:当线程池中空闲线程数量超过corePoolSize时，多余的线程会在多长时间内被销毁；
+keepAliveTime:当线程池中空闲线程数量超过corePoolSize时，多余的线程会在多长时间内被销毁；
   
-  unit:keepAliveTime的单位
+unit:keepAliveTime的单位
   
-  workQueue:任务队列，被添加到线程池中，但尚未被执行的任务；它一般分为直接提交队列、有界任务队列、无界任务队列、优先任务队列几种；
+workQueue:任务队列，被添加到线程池中，但尚未被执行的任务；它一般分为直接提交队列、有界任务队列、无界任务队列、优先任务队列几种；
   
-  threadFactory:线程工厂，用于创建线程，一般用默认即可；
+threadFactory:线程工厂，用于创建线程，一般用默认即可；
   
-  handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；
+handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；
   ~~~
 
+  要能够被广泛使用，该类提供了很多可调参数以及可扩展的钩子，然而程序员被要求使用更为便利的执行器工厂`Executors`的方法们，如：
+
+  - `newCachedThreadPool(...)` 不限制的线程池执行器
+
+    newCachedThreadPool将创建一个可缓存的线程池。如果线程池的当前规模超过了处理需求时，那么就会回收部分空闲的线程（根据空闲时间来回收），当需求增加时，此线程池又可以智能的添加新线程来处理任务。此线程池不会对线程池大小做限制，线程池大小完全依赖于操作系统（或者说JVM）能够创建的最大线程大小。
+  
+  - `newFixedThreadPool(...)` 固定线程数量的线程池执行器
+  
+    newFixedThreadPool将创建一个固定长度的线程池，每当提交一个任务时就会创建一个线程，直到达线程池的最大数量，这时线程池的规模不再变化（如果某个线程由于发生了未预期的Exception而结束，那么线程池会补充一个新的线程）。上述代码中最大的线程数是3，但我提交了4个任务，而且每个任务都阻塞住，所以前三个任务占用了线程池所有的线程，那么第四个任务永远也不会执行，因此该线程池配套使用的队列也是无界的。所以在使用该方法创建线程池时要根据实际情况看需要执行的任务是否占用过多时间，会不会影响后面任务的执行。
+  
+  - `newSingleThreadExecutor(...)` 单线程数量的线程池执行器
+  
+    newSingleThreadExecutor是一个单线程的Executor，它创建单个工作者线程来执行任务，如果这个线程异常结束，会创建另一个线程来代替。newSingleThreadExecutor能确保依照任务在队列中的顺序来串行执行。
+  
+  - `newScheduledThreadPool(...)`
+  
+    newScheduledThreadPool创建了一个固定长度的线程池，而且以延迟或定时或周期的方式来执行任务，类似于Timer。可应用于重发机制。
+
+  以上工厂方法为大部分场景做了预配置，实际上内部都是调用了`newThreadPoolExecutor(...)`的构造函数，我们在使用的时候直接使用即可，另外如果需要手动配置和调优ThreadPoolExecutor，可以参考以下指导：
+
   * **workQueue任务队列**
-
+  
     * **直接提交队列**
-
+    
       ~~~java
       pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
       ~~~
-
+    
       设置为`SynchronousQueue队列`，SynchronousQueue是一个特殊的BlockingQueue，它没有容量，每执行一个插入操作就会阻塞，需要再执行一个删除操作才会被唤醒，反之每一个删除操作也都要等待对应的插入操作。
     
       使用SynchronousQueue队列，提交的任务不会被保存，总是会马上提交执行。如果用于执行任务的线程数量小于maximumPoolSize，则尝试创建新的进程，如果达到maximumPoolSize设置的最大值，则根据你设置的handler执行拒绝策略。因此这种方式你提交的任务不会被缓存起来，而是会被马上执行，在这种情况下，你需要对你程序的并发量有个准确的评估，才能设置合适的maximumPoolSize数量，否则很容易就会执行拒绝策略；  
@@ -454,7 +522,7 @@ Java中线程的生命周期
       ~~~java
       pool = new ThreadPoolExecutor(1, 2, 1000, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>(),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
       ~~~
-  
+    
       除了第一个任务直接创建线程执行外，其他的任务都被放入了优先任务队列，按优先级进行了重新排列执行，且线程池的线程数一直为corePoolSize，也就是只有一个。
       
       通过运行的代码我们可以看出`PriorityBlockingQueue`它其实是一个特殊的无界队列，它其中无论添加了多少个任务，线程池创建的线程数也不会超过corePoolSize的数量，*只不过其他队列一般是按照先进先出的规则处理任务，而PriorityBlockingQueue队列可以自定义规则根据任务的优先级顺序先后执行。*
@@ -464,11 +532,11 @@ Java中线程的生命周期
     一般我们创建线程池时，为防止资源被耗尽，任务队列都会选择创建有界任务队列，但种模式下如果出现任务队列已满且线程池创建的线程数达到你设置的最大线程数时，这时就需要你指定ThreadPoolExecutor的RejectedExecutionHandler参数即合理的拒绝策略，来处理线程池"超载"的情况。ThreadPoolExecutor自带的拒绝策略如下:
   
     * AbortPolicy策略：该策略会直接抛出异常，阻止系统正常工作；
-  
+    
     * CallerRunsPolicy策略：如果线程池的线程数量达到上限，该策略会把任务队列中的任务放在调用者线程当中运行；
-  
+    
     * DiscardOledestPolicy策略：该策略会丢弃任务队列中最老的一个任务，也就是当前任务队列中最先被添加进去的，马上要被执行的那个任务，并尝试再次提交；
-  
+    
     * DiscardPolicy策略：该策略会默默丢弃无法处理的任务，不予任何处理。当然使用此策略，业务场景中需允许任务的丢失；
     * 以上内置的策略均实现了RejectedExecutionHandler接口，当然你也可以自己扩展RejectedExecutionHandler接口，定义自己的拒绝策略
   
@@ -479,3 +547,93 @@ Java中线程的生命周期
   * **ThreadPoolExecutor扩展**
   
     可以看到通过对beforeExecute()、afterExecute()和terminated()的实现，我们对线程池中线程的运行状态进行了监控，在其执行前后输出了相关打印信息。另外使用shutdown方法可以比较安全的关闭线程池， 当线程池调用该方法后，线程池中不再接受后续添加的任务。但是，此时线程池不会立刻退出，直到添加到线程池中的任务都已经处理完成，才会退出。
+    
+* **线程池退出**
+
+  线程池如何正确地等待所有任务执行完？我现在有一些数据需要利用线程池处理，我希望所有数据都处理完了之后才继续后面的流程，那么我怎么确保线程池里面的所有任务都已经执行完了呢？搜了一些资料之后，我有了两种写法，区别是有没有用 CountDownLatch。
+
+  *  用CountDownLatch
+
+    ~~~java
+    // 退出方法1：CountDownLatch定时器
+            List<Integer> tasks = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                tasks.add(i);
+            }
+    
+            ExecutorService pool = Executors.newFixedThreadPool(20);
+    
+            CountDownLatch latch = new CountDownLatch(tasks.size());
+    
+            for (Integer task : tasks) {
+                pool.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            System.out.println("task " + task + " end");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            latch.countDown();
+                        }
+                    }
+                });
+            }
+            // 阻塞等待所有线程结束
+            latch.await();
+            pool.shutdown();
+    ~~~
+
+  * ExecutorService对象的shutdown()和shutdownNow()
+
+    提供两个方法来关闭 ExecutorService。shutdown() 方法在终止前允许执行以前提交的任务，而 shutdownNow() 方法阻止等待任务启动并试图停止当前正在执行的任务。在终止时，执行程序没有任务在执行，也没有任务在等待执行，并且无法提交新任务。应该关闭未使用的 ExecutorService 以允许回收其资源。 
+
+    shutdown：
+
+    当线程池调用该方法时,线程池的状态则立刻变成SHUTDOWN状态。此时，则不能再往线程池中添加任何任务，否则将会抛出RejectedExecutionException异常。但是，此时线程池不会立刻退出，直到添加到线程池中的任务都已经处理完成，才会退出。 
+
+    shutdownNow试图停止当前正执行的task，并返回尚未执行的task的list：
+
+    执行该方法，线程池的状态立刻变成STOP状态，并试图停止所有正在执行的线程，不再处理还在池队列中等待的任务，当然，它会返回那些未执行的任务。 
+         它试图终止线程的方法是通过调用Thread.interrupt()方法来实现的，但是大家知道，这种方法的作用有限，如果线程中没有sleep 、wait、Condition、定时锁等应用, interrupt()方法是无法中断当前的线程的。所以，ShutdownNow()并不代表线程池就一定立即就能退出，它可能必须要等待所有正在执行的任务都执行完成了才能退出。 
+
+    ~~~java
+    List<Integer> tasks = new ArrayList<>();
+            for (int i = 0; i < 15; i++) {
+                tasks.add(i);
+            }
+    
+            ExecutorService pool = Executors.newFixedThreadPool(20);
+    
+            for (Integer task : tasks) {
+                pool.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(500);
+                            System.out.println("task " + task + " end");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                        }
+                    }
+                });
+            }
+            //pool.shutdownNow();
+            pool.shutdown();
+    ~~~
+
+    
+
+参考文章：
+
+>https://www.cnblogs.com/xiguadadage/p/10243332.html
+>
+>https://blog.csdn.net/tongdanping/article/details/79604637
+>
+>https://blog.csdn.net/tongdanping/article/details/79630637
+>
+>https://www.jianshu.com/p/c863d2a9239f
+>
+>https://www.oschina.net/question/2256297_2301666

@@ -3,14 +3,14 @@ package com.cyn.threadpool;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadpool
  * @Date 2020/4/20 19:02
  * @Author: chenyn22577
  * @Version: 1.0
  * @Description: note
  **/
-public class ThreadTask implements Runnable {
+public class ThreadTaskByRunnable implements Runnable {
     private String taskName;
 
     public String getTaskName() {
@@ -21,12 +21,12 @@ public class ThreadTask implements Runnable {
         this.taskName = taskName;
     }
 
-    public ThreadTask(String name) {
+    public ThreadTaskByRunnable(String name) {
         this.setTaskName(name);
     }
 
     @Override
     public void run() {
-        System.out.println("ThreadTask" + Thread.currentThread().getName());
+        System.out.println("ThreadTaskByRunnable：" + taskName + "==" + Thread.currentThread().getName());
     }
 }

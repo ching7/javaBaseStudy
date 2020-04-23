@@ -3,7 +3,7 @@ package com.cyn.threadcommunity;
 /**
  * 文件描述
  *
- * @ProjectName: java-thread
+ * @ProjectName: java-threadcreate
  * @Package: com.cyn.threadcommunity
  * @Date 2020/4/20 16:14
  * @Author: chenyn22577
