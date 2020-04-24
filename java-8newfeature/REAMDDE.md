@@ -158,13 +158,56 @@ main>>4
 
 ## CompletableFuture组合式异步编程
 
-**Future接口的局限性**
+**Future接口**
 
 Future接口在Java 5中被引入，设计初衷是对将来某个时刻会发生的结果进行建模。它建模了一种异步计算，返回一个执行运算结果的引用，当运算结束后，这个引用被返回给调用方。在Future中触发那些潜在耗时的操作把调用线程解放出来，让它能继续执行其他有价值的工作，不需要等待耗时的操作完成。
-作者：夏与清风链接：https://www.jianshu.com/p/11327ad1d645来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+~~~java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+        // 1 创建future
+        FutureTask<String> stringFuture = new FutureTask<String>(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                Thread.sleep(1000);
+
+                return "Future--Test";
+            }
+        });
+        // 线程执行
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.execute(stringFuture);
+
+        //2 //向ExecutorService提交一个Callable对象
+        Future<String> future = executor.submit(new Callable<String>() {
+            @Override
+            public String call() throws InterruptedException {
+                Thread.sleep(1000);
+                //以异步方式在新线程中执行耗时的操作
+                return "延时1秒";
+            }
+        });
+        // 注意get会 阻塞
+        System.out.println(stringFuture.get());
+
+        System.out.println(future.get());
+        executor.shutdown();
+
+    }
+~~~
+
+这种编程方式让你的线程可以在ExecutorService以并发方式调用另一个线程执行耗时操作的同时，去执行一些其他任务。如果已经运行到没有异步操作的结果就无法继续进行时，可以调用它的get方法去获取操作结果。如果操作已经完成，该方法会立刻返回操作结果，否则它会阻塞线程，直到操作完成，返回相应的结果。
+为了处理长时间运行的操作永远不返回的可能性，虽然Future提供了一个无需任何参数的get方法，但还是推荐使用重载版本的get方法，它接受一个超时的参数，可以定义线程等待Future结果的时间，而不是永无止境地等待下去
+
+![](../document/images/java-thread6.jpg)
+
+**Future接口的局限性**
+Future接口提供了方法来检测异步计算是否已经结束（使用isDone方法），等待异步操作结束，以及获取计算的结果。但这些特性还不足以让你编写简洁的并发代码。
 
 - 将两个异步计算合并为一个，这两个异步计算之间相互独立，同时第二个又依赖于第一个的结果。
 - 等待Future集合中的所有任务都完成。
 - 仅等待Future集合中快结束的任务完成，并返回它的结果。
 - 通过编程方式完成一个Future任务的执行。
 - 应对Future的完成事件（即当Future的完成事件发生时会收到通知，并能使用Future计算的结果进行下一步操作，不只是简单地阻塞等待操作结果）。
+
+**实现异步API**
+
