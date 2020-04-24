@@ -107,3 +107,64 @@ Stream（流）是一个来自数据源的元素队列并支持聚合操作
   Optional 类还有三个特化版本 OptionalInt，OptionalLong，OptionalDouble
 
   Optional 类其中其实还有很多学问，讲解它说不定也要开一篇文章，这里先讲那么多，先知道基本怎么用就可以。
+
+## 并行流parallelStream
+
+parallelStream提供了流的并行处理，它是Stream的另一重要特性，其底层使用Fork/Join框架实现。简单理解就是多线程异步任务的一种实现。
+
+~~~java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9); 
+numbers.parallelStream().forEach(num->System.out.println(num));
+
+输出：3 4 2 6 7 9 8 1 5
+~~~
+
+使用parallelStream后，结果并不按照集合原有顺序输出。为了进一步证明该操作是并行的，我们打印出线程信息。
+
+~~~java
+   List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9); 
+   numbers.parallelStream() .forEach(num-
+   		>System.out.println(Thread.currentThread().getName()+">>"+num)); 
+输出
+main>>6 
+ForkJoinPool.commonPool-worker-2>>8 
+main>>5 ForkJoinPool.commonPool-worker-2>>9 
+ForkJoinPool.commonPool-worker-1>>3 
+ForkJoinPool.commonPool-worker-3>>2 
+ForkJoinPool.commonPool-worker-1>>1 
+ForkJoinPool.commonPool-worker-2>>7 
+main>>4
+~~~
+
+可以确信parallelStream是利用多线程进行的，这可以很大程度简化我们使用并发操作。
+
+* **并行流的陷阱**
+
+  1. 线程安全
+
+     由于并行流使用多线程，则一切线程安全问题都应该是需要考虑的问题，如：资源竞争、死锁、事务、可见性等等。
+
+  2. 线程消费
+
+     在虚拟机启动时，我们指定了worker线程的数量，整个程序的生命周期都将使用这些工作线程；这必然存在任务生产和消费的问题，如果某个生产者生产了许多重量级的任务（耗时很长），那么其他任务毫无疑问将会没有工作线程可用；更可怕的事情是这些工作线程正在进行IO阻塞。
+
+     本应利用并行加速处理的业务，因为工作者不够反而会额外增加处理时间，使得系统性能在某一时刻大打折扣。而且这一类问题往往是很难排查的。我们并不知道一个重量级项目中的哪一个框架、哪一个模块在使用并行流。
+
+  接下来我们对这个问题进行演示
+
+**串行流**：适合存在线程安全问题、阻塞任务、重量级任务，以及需要使用同一事务的逻辑。
+
+**并行流**：适合没有线程安全问题、较单纯的数据处理任务
+
+## CompletableFuture组合式异步编程
+
+**Future接口的局限性**
+
+Future接口在Java 5中被引入，设计初衷是对将来某个时刻会发生的结果进行建模。它建模了一种异步计算，返回一个执行运算结果的引用，当运算结束后，这个引用被返回给调用方。在Future中触发那些潜在耗时的操作把调用线程解放出来，让它能继续执行其他有价值的工作，不需要等待耗时的操作完成。
+作者：夏与清风链接：https://www.jianshu.com/p/11327ad1d645来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+- 将两个异步计算合并为一个，这两个异步计算之间相互独立，同时第二个又依赖于第一个的结果。
+- 等待Future集合中的所有任务都完成。
+- 仅等待Future集合中快结束的任务完成，并返回它的结果。
+- 通过编程方式完成一个Future任务的执行。
+- 应对Future的完成事件（即当Future的完成事件发生时会收到通知，并能使用Future计算的结果进行下一步操作，不只是简单地阻塞等待操作结果）。
