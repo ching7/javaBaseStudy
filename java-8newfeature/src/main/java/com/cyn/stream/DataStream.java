@@ -1,5 +1,7 @@
 package com.cyn.stream;
 
+import java.util.Arrays;
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 /**
@@ -20,6 +22,12 @@ public class DataStream {
     public static void main(String[] args) {
         IntStream intStream = IntStream.rangeClosed(1, 10);
         System.out.println(intStream.sum());
+        int[] intArr = IntStream.rangeClosed(1, 10).toArray();
+        Arrays.stream(intArr).forEach( value -> System.out.println(value));
+
+        OptionalInt intMax = IntStream.rangeClosed(1, 10).max();
+        System.out.println(intMax.getAsInt());
+
     }
 
 }

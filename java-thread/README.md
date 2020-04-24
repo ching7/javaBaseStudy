@@ -20,6 +20,64 @@
 
   在Java Web中要注意，线程是JVM级别的，在不停止的情况下，跟JVM共同消亡，就是说如果一个Web服务启动了多个Web应用，某个Web应用启动了某个线程，如果关闭这个Web应用，线程并不会关闭，因为JVM还在运行，所以别忘了设置Web应用关闭时停止线程。
 
+## 使用多线程场景
+
+- **CPU 密集型程序**
+
+  > 一个完整请求，I/O操作可以在很短时间内完成， CPU还有很多运算要处理，也就是说 CPU 计算的比例占很大一部分
+
+  假如我们要计算 1+2+....100亿 的总和，很明显，这就是一个 CPU 密集型程序
+
+  在【单核】CPU下，如果我们创建 4 个线程来分段计算，即：
+
+  1. 线程1计算 `[1,25亿）`
+  2. ...... 以此类推
+  3. 线程4计算 `[75亿，100亿]`
+
+  我们来看下图他们会发生什么？
+
+  ![](../document/images/java-thread2.jpg)
+
+  由于是单核 CPU，所有线程都在等待 CPU 时间片。按照理想情况来看，四个线程执行的时间总和与一个线程5独自完成是相等的，实际上我们还忽略了四个线程上下文切换的开销
+
+  **所以，单核CPU处理CPU密集型程序，这种情况并不太适合使用多线程**
+
+  此时如果在 4 核CPU下，同样创建四个线程来分段计算，看看会发生什么？
+
+  ![](../document/images/java-thread3.jpg)
+
+  每个线程都有 CPU 来运行，并不会发生等待 CPU 时间片的情况，也没有线程切换的开销。理论情况来看效率提升了 4 倍
+
+  **所以，如果是多核CPU 处理 CPU 密集型程序，我们完全可以最大化的利用 CPU 核心数，应用并发编程来提高效率**
+
+  对于 CPU 密集型来说，理论上 `线程数量 = CPU 核数（逻辑）` 就可以了，但是实际上，数量一般会设置为 `CPU 核数（逻辑）+ 1`， 为什么呢？
+
+  《Java并发编程实战》这么说：
+
+  > 计算(CPU)密集型的线程恰好在某时因为发生一个页错误或者因其他原因而暂停，刚好有一个“额外”的线程，可以确保在这种情况下CPU周期不会中断工作
+
+  所以对于CPU密集型程序，  `CPU 核数（逻辑）+ 1` 个线程数是比较好
+
+- **I/O 密集型程序**
+
+  > 与 CPU 密集型程序相对，一个完整请求，CPU运算操作完成之后还有很多 I/O 操作要做，也就是说 I/O 操作占比很大部分
+
+  我们都知道在进行 I/O 操作时，CPU是空闲状态，所以我们要最大化的利用 CPU，不能让其是空闲状态
+
+  同样在单核 CPU 的情况下：
+
+  ![](../document/images/java-thread4.jpg)
+
+  从上图中可以看出，每个线程都执行了相同长度的 CPU 耗时和 I/O 耗时，如果你将上面的图多画几个周期，CPU操作耗时固定，将 I/O 操作耗时变为 CPU 耗时的 3 倍，你会发现，CPU又有空闲了，这时你就可以新建线程 4，来继续最大化的利用 CPU。
+
+  综上两种情况我们可以做出这样的总结：
+
+  > 线程等待时间所占比例越高，需要越多线程；线程CPU时间所占比例越高，需要越少线程。
+
+  上面已经让大家按照图多画几个周期（你可以动手将I/O耗时与CPU耗时比例调大，比如6倍或7倍），这样你就会得到一个结论，对于 I/O 密集型程序：
+
+  > 最佳线程数 =  `(1/CPU利用率)` = `1 + (I/O耗时/CPU耗时)`
+
 ## 线程的生命周期及五种基本状态
 
 Java中线程的生命周期
@@ -629,6 +687,12 @@ handler:拒绝策略；当任务太多来不及处理时，如何拒绝任务；
 
 > ForkJoinPool是ExecutorSerice的一个补充，而不是替代品
 
+Fork/Join 并行流等当计算的数字非常大的时候，优势才能体现出来。也就是说，如果你的计算比较小，或者不是CPU密集型的任务，不太建议使用并行处理
+
+不适合执行有block比如有io的任务
+线程block的时候，线程池会调度线程池队列中的其他未线程运行，这是ExecutorService的机制；
+但是`ForkJoinPool`中的`ForkJoinWorkerThread`工作机制是不停执行本地`workQueue`中的task，task是一个个取的，顺序执行，没有塞回去的动作，并不会因为某个task引起block后而换个task继续执行；
+
 通常大家说的Fork/Join框架其实就是指
 
 * 由ForkJoinPool作为线程池
@@ -645,6 +709,86 @@ ForkJoinPool 最适合的是计算密集型的任务，如果存在 I/O，线程
 
 > AVA8中CompeleteFuture、并发流等都是基于ForkJoinPool实现；
 
+~~~java
+public class ForkJoinCalculator implements Calculator {
+
+    private ForkJoinPool pool;
+
+    //执行任务RecursiveTask：有返回值  RecursiveAction：无返回值
+    private static class SumTask extends RecursiveTask<Long> {
+        private long[] numbers;
+        private int from;
+        private int to;
+
+        public SumTask(long[] numbers, int from, int to) {
+            this.numbers = numbers;
+            this.from = from;
+            this.to = to;
+        }
+
+        //此方法为ForkJoin的核心方法：对任务进行拆分  拆分的好坏决定了效率的高低
+        @Override
+        protected Long compute() {
+
+            // 当需要计算的数字个数小于6时，直接采用for loop方式计算结果
+            if (to - from < 6) {
+                long total = 0;
+                for (int i = from; i <= to; i++) {
+                    total += numbers[i];
+                }
+                return total;
+            } else { // 否则，把任务一分为二，递归拆分(注意此处有递归)到底拆分成多少分 需要根据具体情况而定
+                int middle = (from + to) / 2;
+                SumTask taskLeft = new SumTask(numbers, from, middle);
+                SumTask taskRight = new SumTask(numbers, middle + 1, to);
+                taskLeft.fork();
+                taskRight.fork();
+                return taskLeft.join() + taskRight.join();
+            }
+        }
+    }
+
+    public ForkJoinCalculator() {
+        // 也可以使用公用的线程池 ForkJoinPool.commonPool()：
+        // pool = ForkJoinPool.commonPool()
+        pool = new ForkJoinPool();
+    }
+
+    @Override
+    public long sumUp(long[] numbers) {
+        Long result = pool.invoke(new SumTask(numbers, 0, numbers.length - 1));
+        pool.shutdown();
+        return result;
+    }
+}
+输出：
+耗时：390ms
+结果为：50000005000000
+~~~
+
+根据上面的示例代码，可以看出 fork() 和 join() 是 Fork/Join Framework “魔法”的关键。我们可以根据函数名假设一下 fork() 和 join() 的作用：
+
+fork()：开启一个新线程（或是重用线程池内的空闲线程），将任务交给该线程处理。
+join()：等待该任务的处理线程处理完毕，获得返回值。
+疑问：当任务分解得越来越细时，所需要的线程数就会越来越多，而且大部分线程处于等待状态？
+
+但是如果我们在上面的示例代码加入以下代码
+
+`System.out.println(pool.getPoolSize());`
+
+这会显示当前线程池的大小，在我的机器上这个值是8，也就是说只有9个工作线程。甚至即使我们在初始化 pool 时指定所使用的线程数为1时，上述程序也没有任何问题——除了变成了一个串行程序以外。
+
+并不是每个 fork() 都会促成一个新线程被创建，而每个 join() 也不是一定会造成线程被阻塞。Fork/Join Framework 的实现算法并不是那么“显然”，而是一个更加复杂的算法——这个算法的名字就叫做work stealing 算法。
+
+![](../document/images/java-thread5.jpg)
+
+ForkJoinPool 的每个工作线程都维护着一个工作队列（WorkQueue），这是一个双端队列（Deque），里面存放的对象是任务（ForkJoinTask）。
+每个工作线程在运行中产生新的任务（通常是因为调用了 fork()）时，会放入工作队列的队尾，并且工作线程在处理自己的工作队列时，使用的是 LIFO 方式，也就是说每次从队尾取出任务来执行。
+每个工作线程在处理自己的工作队列同时，会尝试窃取一个任务（或是来自于刚刚提交到 pool 的任务，或是来自于其他工作线程的工作队列），窃取的任务位于其他线程的工作队列的队首，也就是说工作线程在窃取其他工作线程的任务时，使用的是 FIFO 方式。
+在遇到 join() 时，如果需要 join 的任务尚未完成，则会先处理其他任务，并等待其完成。
+
+submit() 和 fork() 其实没有本质区别，只是提交对象变成了 submitting queue 而已（还有一些同步，初始化的操作）。submitting queue 和其他 work queue 一样，是工作线程”窃取“的对象，因此当其中的任务被一个工作线程成功窃取时，就意味着提交的任务真正开始进入执行阶段。
+
 参考文章：
 
 >https://www.cnblogs.com/xiguadadage/p/10243332.html
@@ -656,3 +800,5 @@ ForkJoinPool 最适合的是计算密集型的任务，如果存在 I/O，线程
 >https://www.jianshu.com/p/c863d2a9239f
 >
 >https://www.oschina.net/question/2256297_2301666
+>
+>[面试问我，创建多少个线程合适？我该怎么说！](https://mp.weixin.qq.com/s?__biz=MzU1Nzg4NjgyMw==&mid=2247484801&idx=2&sn=bc745a2590227dc69ef645e173d55852&chksm=fc2fb989cb58309f455468730e13f02649a3e21439bf836c082e7c31fdc97c4060566402eb83&scene=126&sessionid=1587690457&key=4607588a48ec869a1e20f3763583b6519e88cfe8f1e77960d01eb0bb15a6d8867209b8e6961b345bb2b31fa7574b8de7a6ee2ee5e6ae2dc9c651b1da757054be38e994f4d0f9b05f466f14fb5f0de1dc&ascene=1&uin=OTgzMTE5NzYx&devicetype=Windows+10+x64&version=62090069&lang=zh_CN&exportkey=Ab7eR2yeC1DCJK9pf4xFWT4%3D&pass_ticket=xMtI6A4YD%2B6pWXT4bcSU1hPRVrdX5GbNNFfR3HGLiXXpT8DOhLehpK%2BwI8U5Bssx)
