@@ -201,13 +201,13 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
 ![](../document/images/java-thread6.jpg)
 
 **Future接口的局限性**
-Future接口提供了方法来检测异步计算是否已经结束（使用isDone方法），等待异步操作结束，以及获取计算的结果。但这些特性还不足以让你编写简洁的并发代码。
-
-- 将两个异步计算合并为一个，这两个异步计算之间相互独立，同时第二个又依赖于第一个的结果。
-- 等待Future集合中的所有任务都完成。
-- 仅等待Future集合中快结束的任务完成，并返回它的结果。
-- 通过编程方式完成一个Future任务的执行。
-- 应对Future的完成事件（即当Future的完成事件发生时会收到通知，并能使用Future计算的结果进行下一步操作，不只是简单地阻塞等待操作结果）。
+使用`Future`获得异步执行结果时，要么调用阻塞方法`get()`，要么轮询看`isDone()`是否为`true`，这两种方法都不是很好，因为主线程也会被迫等待。
 
 **实现异步API**
+
+`CompletableFuture`的优点是：
+
+- 异步任务结束时，会自动回调某个对象的方法；
+- 异步任务出错时，会自动回调某个对象的方法；
+- 主线程设置好回调后，不再关心异步任务的执行。
 

@@ -20,8 +20,10 @@ public class ThreadDemoByThread extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < 10; i++) {
+        while (!isInterrupted()) {
+            int i = 1;
             System.out.println(name + "运行  ：" + i);
+            i++;
         }
     }
 }
