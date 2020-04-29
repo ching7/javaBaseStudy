@@ -15,9 +15,16 @@ import java.util.concurrent.Executors;
  * @Description: note
  **/
 public class ThreadMain2 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(3);
         ThreadDemoByRunnable task = new ThreadDemoByRunnable("测试");
-        executor.execute(task);
+        int count = 3;
+        while (count > 0) {
+            executor.execute(task);
+            count--;
+        }
+        Thread.sleep(100);
+        task.running = false;
+        executor.shutdown();
     }
 }

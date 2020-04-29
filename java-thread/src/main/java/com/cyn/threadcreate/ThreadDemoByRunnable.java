@@ -14,6 +14,8 @@ package com.cyn.threadcreate;
  * 创建Runnable实现类的实例，并以此实例作为Thread类的target来创建Thread对象，该Thread对象才是真正的线程对象。
  **/
 public class ThreadDemoByRunnable implements Runnable {
+    public volatile boolean running = true;
+
     private String name;
 
     public ThreadDemoByRunnable(String name) {
@@ -22,10 +24,19 @@ public class ThreadDemoByRunnable implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            int i = 1;
-            System.out.println(name + "运行  ：" + i);
-            i++;
+        // 1 判断线程中断
+
+//        while (!Thread.currentThread().isInterrupted()) {
+//            int i = 1;
+//            System.out.println(name + "运行  ：" + i);
+//            i++;
+//        }
+        // 2 判断线程中断
+        int n=0;
+        while (running) {
+            n++;
+            System.out.println( "任务名："+this.name + " " + n+ " hello!"+ "使用线程："+Thread.currentThread().getName());
         }
+        System.out.println(this.name + " end");
     }
 }
