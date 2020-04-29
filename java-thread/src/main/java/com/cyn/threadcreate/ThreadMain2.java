@@ -25,6 +25,10 @@ public class ThreadMain2 {
         }
         Thread.sleep(100);
         task.running = false;
-        executor.shutdown();
+        ThreadDaemon timer = new ThreadDaemon();
+        timer.setDaemon(true);
+
+        executor.execute(timer);
+        executor.shutdownNow();
     }
 }
