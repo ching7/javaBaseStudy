@@ -342,14 +342,81 @@ Java中线程的生命周期
     **全局锁** -- 该锁针对的是类，无论实例多少个对象，那么线程都共享该锁。全局锁对应的就是static synchronized（或者是锁在该类的class或者classloader对象上）。
 
     就是说，一个非静态方法上的synchronized关键字，代表该方法依赖其所属对象。一个静态方法上synchronized关键字，代表该方法依赖这个类本身。
+  
+* `ReentrantLock`关键字
+
+  和`synchronized`不同的是，`ReentrantLock`可以尝试获取锁：
+
+  ```java
+  public int add(int n) throws InterruptedException {
+          if (lock.tryLock(5, TimeUnit.MILLISECONDS)) {
+              try {
+                  Thread.sleep(10);
+                  return count += n;
+              } finally {
+                  lock.unlock();
+              }
+          }else{
+              System.out.println(Thread.currentThread().getName()+"获取锁失败");
+              return 0;
+          }
+      }
+  ```
+
+  上述代码在尝试获取锁的时候，最多等待1秒。如果1秒后仍未获取到锁，`tryLock()`返回`false`，程序就可以做一些额外处理，而不是无限等待下去。
+
+  ~~~properties
+  pool-1-thread-2获取锁失败
+  pool-1-thread-3获取锁失败
+  pool-1-thread-2==计算 ==结果0
+  pool-1-thread-3==计算 ==结果0
+  pool-1-thread-1==计算 ==结果1
+  pool-1-thread-3获取锁失败
+  pool-1-thread-3==计算 ==结果0
+  pool-1-thread-3获取锁失败
+  pool-1-thread-1获取锁失败
+  pool-1-thread-3==计算 ==结果0
+  pool-1-thread-1==计算 ==结果0
+  pool-1-thread-2==计算 ==结果2
+  pool-1-thread-1获取锁失败
+  pool-1-thread-1==计算 ==结果0
+  pool-1-thread-2获取锁失败
+  pool-1-thread-2==计算 ==结果0
+  pool-1-thread-3==计算 ==结果3
+  ~~~
+
+  
+
+  所以，使用`ReentrantLock`比直接使用`synchronized`更安全，线程在`tryLock()`失败的时候不会导致死锁。
+
+  `ReentrantLock`可以替代`synchronized`进行同步；
+
+  `ReentrantLock`获取锁更安全；
+
+  必须先获取到锁，再进入`try {...}`代码块，最后使用`finally`保证释放锁；
+
+  可以使用`tryLock()`尝试获取锁。
 
 ## 线程通信
 
-* wait()：导致当前线程等待并使其进入到等待阻塞状态。直到其他线程调用该同步锁对象的notify()或notifyAll()方法来唤醒此线程。
+* **wait()：**导致当前线程等待并使其进入到等待阻塞状态。直到其他线程调用该同步锁对象的notify()或notifyAll()方法来唤醒此线程。
 
-* notify()：唤醒在此同步锁对象上等待的单个线程，如果有多个线程都在此同步锁对象上等待，则会任意选择其中某个线程进行唤醒操作，只有当前线程放弃对同步锁对象的锁定，才可能执行被唤醒的线程。
+  `wait()`方法的执行机制非常复杂。首先，它不是一个普通的Java方法，而是定义在`Object`类的一个`native`方法，也就是由JVM的C代码实现的。其次，必须在`synchronized`块中才能调用`wait()`方法，因为`wait()`方法调用时，会*释放*线程获得的锁，`wait()`方法返回后，线程又会重新试图获得锁。
 
-* notifyAll()：唤醒在此同步锁对象上等待的所有线程，**只有当前线程放弃对同步锁对象的锁定，才可能执行被唤醒的线程。**
+  ~~~java
+  public synchronized String getTask() {
+      while (queue.isEmpty()) {
+          // 释放this锁:
+          this.wait();
+          // 重新获取this锁
+      }
+      return queue.remove();
+  }
+  ~~~
+
+* **notify()：**唤醒在此同步锁对象上等待的单个线程，如果有多个线程都在此同步锁对象上等待，则会任意选择其中某个线程进行唤醒操作，只有当前线程放弃对同步锁对象的锁定，才可能执行被唤醒的线程。
+
+* **notifyAll()：**唤醒在此同步锁对象上等待的所有线程，**只有当前线程放弃对同步锁对象的锁定，才可能执行被唤醒的线程。**
 
   ~~~java
   // 存取钱的demo
@@ -357,15 +424,15 @@ Java中线程的生命周期
 
   注意：
 
-  * wait()方法执行后，当前线程立即进入到等待阻塞状态，其后面的代码不会执行；
+  * `wait()`方法执行后，当前线程立即进入到等待阻塞状态，其后面的代码不会执行；
 
-  * notify()/notifyAll()方法执行后，将唤醒此同步锁对象上的（任意一个-notify()/所有-notifyAll()）线程对象，但是，此时还并没有释放同步锁对象，也就是说，*如果notify()/notifyAll()后面还有代码，还会继续执行，直到当前线程执行完毕才会释放同步锁对象，或者执行了wait（）方法*
+  * `notify()/notifyAll()`方法执行后，将唤醒此同步锁对象上的（任意一个-`notify()`/所有-`notifyAll()`）线程对象，但是，此时还并没有释放同步锁对象，也就是说，*如果notify()/notifyAll()后面还有代码，还会继续执行，直到当前线程执行完毕才会释放同步锁对象，或者执行了wait（）方法*
 
-  * notify()/notifyAll()执行后，如果下面有sleep()方法，则会使当前线程进入到阻塞状态，但是同步对象锁没有释放，依然自己保留，那么一定时候后还是会继续执行此线程，接下来同2；
+  * `notify()/notifyAll()`执行后，如果下面有`sleep()`方法，则会使当前线程进入到阻塞状态，但是同步对象锁没有释放，依然自己保留，那么一定时候后还是会继续执行此线程，接下来同2；
 
-  * wait()/notify()/nitifyAll()完成线程间的通信或协作都是基于相同对象锁的，因此，如果是不同的同步对象锁将失去意义，同时，同步对象锁最好是与共享资源对象保持一一对应关系；
+  * `wait()/notify()/nitifyAll()`完成线程间的通信或协作都是基于相同对象锁的，因此，如果是不同的同步对象锁将失去意义，同时，同步对象锁最好是与共享资源对象保持一一对应关系；
 
-  * 当wait线程唤醒后并执行时，是接着上次执行到的wait()方法代码后面继续往下执行的。
+  * 当wait线程唤醒后并执行时，是接着上次执行到的`wait()`方法代码后面继续往下执行的。
 
 ## 线程优先级和守护线程
 
