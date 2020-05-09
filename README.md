@@ -69,3 +69,11 @@ java多线程demo
 ## java-idempotence
 
 * java幂等性介绍
+
+---
+
+**欢迎关注微信公众号: 敲代码的小陈**
+
+每周分享代码优化方法、效率工具
+
+![](F:/HS_Study/javaBaseStudy/document/images/wechatqr.png)

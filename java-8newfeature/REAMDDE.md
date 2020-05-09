@@ -111,27 +111,54 @@ Stream（流）是一个来自数据源的元素队列并支持聚合操作
 
   IntStream 与 LongStream 拥有 range 和 rangeClosed 方法用于数值范围处理
   
-- IntStream ： rangeClosed(int, int) / range(int, int)
-  - LongStream ： rangeClosed(long, long) / range(long, long)
-
+  IntStream ： rangeClosed(int, int) / range(int, int)
+  
+  LongStream ： rangeClosed(long, long) / range(long, long)
+  
   这两个方法的区别在于一个是闭区间，一个是半开半闭区间：
   
-- rangeClosed(1, 100) ：[1, 100]
-  - range(1, 100) ：[1, 100)
-
+  rangeClosed(1, 100) ：[1, 100]
+  
+  range(1, 100) ：[1, 100)
+  
   数值流中的 max 方法返回的类型是Optional
+  
+  ~~~java
+  public static void main(String[] args) {
+          IntStream intStream = IntStream.rangeClosed(1, 10);
+          System.out.println(intStream.sum());
+          System.out.println("###");
+  
+          int[] intArr = IntStream.rangeClosed(1, 10).toArray();
+          Arrays.stream(intArr).forEach( value -> System.out.print(value+" "));
+          System.out.println("###");
+  
+          OptionalInt intMax = IntStream.rangeClosed(1, 10).max();
+          System.out.println(intMax.getAsInt());
+      }
+  ~~~
+  
+  输出：
+  
+  ~~~properties
+  55
+  ###
+  1 2 3 4 5 6 7 8 9 10 ###
+  10
+  ~~~
+* NullPointerException
 
-  * NullPointerException 可以说是每一个 Java 程序员都非常讨厌看到的一个词，针对这个问题， Java 8 引入了一个新的容器类 Optional，可以代表一个值存在或不存在，这样就不用返回容易出问题的 null。之前文章的代码中就经常出现这个类，也是针对这个问题进行的改进。
+  NullPointerException可以说是每一个 Java 程序员都非常讨厌看到的一个词，针对这个问题， Java 8 引入了一个新的容器类 Optional，可以代表一个值存在或不存在，这样就不用返回容易出问题的 null。之前文章的代码中就经常出现这个类，也是针对这个问题进行的改进。
 
   Optional 类比较常用的几个方法有：
-  
-  - isPresent() ：值存在时返回 true，反之 flase
-- get() ：返回当前值，若值不存在会抛出异常
-  - orElse(T) ：值存在时返回该值，否则返回 T 的值
+
+  isPresent() ：值存在时返回 true，反之 flase
+
+  get() ：返回当前值，若值不存在会抛出异常
+
+  orElse(T) ：值存在时返回该值，否则返回 T 的值
 
   Optional 类还有三个特化版本 OptionalInt，OptionalLong，OptionalDouble
-  
-  Optional 类其中其实还有很多学问，讲解它说不定也要开一篇文章，这里先讲那么多，先知道基本怎么用就可以。
 
 ## 并行流parallelStream
 
@@ -163,19 +190,17 @@ main>>4
 
 可以确信parallelStream是利用多线程进行的，这可以很大程度简化我们使用并发操作。
 
-* **并行流的陷阱**
+**并行流的陷阱:**
 
-  1. 线程安全
+1. 线程安全
 
-     由于并行流使用多线程，则一切线程安全问题都应该是需要考虑的问题，如：资源竞争、死锁、事务、可见性等等。
+   由于并行流使用多线程，则一切线程安全问题都应该是需要考虑的问题，如：资源竞争、死锁、事务、可见性等等。
 
-  2. 线程消费
+2. 线程消费
 
-     在虚拟机启动时，我们指定了worker线程的数量，整个程序的生命周期都将使用这些工作线程；这必然存在任务生产和消费的问题，如果某个生产者生产了许多重量级的任务（耗时很长），那么其他任务毫无疑问将会没有工作线程可用；更可怕的事情是这些工作线程正在进行IO阻塞。
+   在虚拟机启动时，我们指定了worker线程的数量，整个程序的生命周期都将使用这些工作线程；这必然存在任务生产和消费的问题，如果某个生产者生产了许多重量级的任务（耗时很长），那么其他任务毫无疑问将会没有工作线程可用；更可怕的事情是这些工作线程正在进行IO阻塞。
 
-     本应利用并行加速处理的业务，因为工作者不够反而会额外增加处理时间，使得系统性能在某一时刻大打折扣。而且这一类问题往往是很难排查的。我们并不知道一个重量级项目中的哪一个框架、哪一个模块在使用并行流。
-
-  接下来我们对这个问题进行演示
+   本应利用并行加速处理的业务，因为工作者不够反而会额外增加处理时间，使得系统性能在某一时刻大打折扣。而且这一类问题往往是很难排查的。我们并不知道一个重量级项目中的哪一个框架、哪一个模块在使用并行流。
 
 **串行流**：适合存在线程安全问题、阻塞任务、重量级任务，以及需要使用同一事务的逻辑。
 
@@ -317,3 +342,11 @@ https://money.163.com/price/ used time 935
 > [廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/1252599548343744)
 >
 > [菜鸟教程](https://www.runoob.com/java/java8-new-features.html)
+
+---
+
+**欢迎关注微信公众号: 敲代码的小陈**
+
+每周分享代码优化方法、效率工具、教程资源分享
+
+![](../document/images/wechatqr.png)

@@ -22,8 +22,11 @@ public class DataStream {
     public static void main(String[] args) {
         IntStream intStream = IntStream.rangeClosed(1, 10);
         System.out.println(intStream.sum());
+        System.out.println("###");
+
         int[] intArr = IntStream.rangeClosed(1, 10).toArray();
-        Arrays.stream(intArr).forEach( value -> System.out.println(value));
+        Arrays.stream(intArr).forEach( value -> System.out.print(value+" "));
+        System.out.println("###");
 
         OptionalInt intMax = IntStream.rangeClosed(1, 10).max();
         System.out.println(intMax.getAsInt());
