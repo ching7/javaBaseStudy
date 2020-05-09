@@ -2,8 +2,6 @@
 
 [![java](https://img.shields.io/badge/JAVA-1.8+-green.svg)](##Lambda)
 
-[TOC]
-
 ## Lambda
 
 * 什么是`Lambda`

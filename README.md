@@ -2,8 +2,6 @@
 
 [![java](https://img.shields.io/badge/JAVA-1.8+-green.svg)](#java-proxy)
 
-[TOC]
-
 ## java-proxy
 
 - java常用的代理模式
