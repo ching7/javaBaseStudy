@@ -2,6 +2,8 @@
 
 [![java](https://img.shields.io/badge/JAVA-1.8+-green.svg)](#java-proxy)
 
+[TOC]
+
 ## java-proxy
 
 - java常用的代理模式
@@ -46,14 +48,26 @@ java多线程demo
 
 ## java-design-pattern
 
-Java常用设计模式介绍以及demo
+* Java常用设计模式介绍以及demo
 
-策略模式，工厂模式，单例模式，抽象工厂
+* 策略模式，工厂模式，单例模式，抽象工厂
 
 > [参考文章](https://www.runoob.com/design-pattern/strategy-pattern.html)
 
 ## java-8newfeature
 
-Java8新特性介绍
+* Java8新特性介绍
 
-Lambda表达式
+* Lambda表达式
+
+## java-socket
+
+* java实现socket通信demo
+
+## java-transactional
+
+* java事务介绍
+
+## java-idempotence
+
+* java幂等性介绍
