@@ -25,11 +25,13 @@ public class DataStream {
         System.out.println("###");
 
         int[] intArr = IntStream.rangeClosed(1, 10).toArray();
-        Arrays.stream(intArr).forEach( value -> System.out.print(value+" "));
+        Arrays.stream(intArr)
+                .forEach( value -> System.out.println(value+" "));
         System.out.println("###");
 
         OptionalInt intMax = IntStream.rangeClosed(1, 10).max();
         System.out.println(intMax.getAsInt());
+        System.out.println("###");
 
     }
 

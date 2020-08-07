@@ -16,25 +16,32 @@ import java.util.List;
 public class ParallelDemo {
     public static void main(String[] args) throws InterruptedException {
 
-        /*List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        numbers.forEach(num -> System.out.println(num));
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        numbers.stream()
+                .forEach(num -> System.out.println(" >>>> " + num));
+        System.out.println("---------");
+
+        numbers.parallelStream()
+                .forEach(num -> System.out.println(" >>>> " + num));
+        System.out.println("---------");
+
+        numbers.parallelStream()
+                .forEach(num -> System.out.println(Thread.currentThread().getName() + " >>>> " + num));
         System.out.println("=========");
-        numbers.parallelStream().forEach(num -> System.out.println(Thread.currentThread().getName() + " >>>> " + num));
-        System.out.println("=========");*/
 
-        Thread thread1 = new Thread(() -> {
-            streamTest1();
-        });
-
-        Thread thread2 = new Thread(() -> {
-            streamTest2();
-        });
-
-        thread1.start();
-        thread2.start();
-
-        thread1.join();
-        thread2.join();
+//        Thread thread1 = new Thread(() -> {
+//            streamTest1();
+//        });
+//
+//        Thread thread2 = new Thread(() -> {
+//            streamTest2();
+//        });
+//
+//        thread1.start();
+//        thread2.start();
+//
+//        thread1.join();
+//        thread2.join();
     }
 
     //stream
