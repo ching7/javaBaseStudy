@@ -43,19 +43,19 @@ Java 序列化是 JDK 1.1 时引入的一组开创性的特性，用于将 Java 
   - 由于没有实现`Serializbale` 接口，运行过程中会报错
 
   ```properties
-  com.cyn.bean.People@28d93b30
-  java.io.NotSerializableException: com.cyn.bean.People
+  People@28d93b30
+  java.io.NotSerializableException: People
   	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1184)
   	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:348)
-  	at com.cyn.bean.TestMain.main(TestMain.java:25)
-  java.io.WriteAbortedException: writing aborted; java.io.NotSerializableException: com.cyn.bean.People
+  	at TestMain.main(TestMain.java:25)
+  java.io.WriteAbortedException: writing aborted; java.io.NotSerializableException: People
   	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1355)
   	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:371)
-  	at com.cyn.bean.TestMain.main(TestMain.java:32)
-  Caused by: java.io.NotSerializableException: com.cyn.bean.People
+  	at TestMain.main(TestMain.java:32)
+  Caused by: java.io.NotSerializableException: People
   	at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1184)
   	at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:348)
-  	at com.cyn.bean.TestMain.main(TestMain.java:25)
+  	at TestMain.main(TestMain.java:25)
   
   ```
 
