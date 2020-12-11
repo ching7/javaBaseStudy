@@ -40,13 +40,20 @@ public class ThreadMain {
 
         // 方法3
         // 1 创建ThreadDemo3对象
-        Callable<Integer> myCallable = new ThreadDemoByCallable();
+        // Callable<Integer> myCallable = new ThreadDemoByCallable();
+        Callable<String> myCallable = () -> {
+            System.out.println("自定义lambda:" + Thread.currentThread().getName());
+            return "自定义lambda";
+        };
         // 2 使用FutureTask来包装MyCallable对象
-        FutureTask<Integer> ft = new FutureTask<Integer>(myCallable);
+        // FutureTask<Integer> ft = new FutureTask<Integer>(myCallable);
+        FutureTask<String> ft = new FutureTask<String>(myCallable);
+
         // 3 FutureTask对象作为Thread对象的target创建新的线程
         Thread thread1 = new Thread(ft);
         long startTime = System.currentTimeMillis();
-
+        ThreadDemoByThread testT = new ThreadDemoByThread("测试线程");
+        testT.start();
         // 4 线程进入到就绪状态
         thread1.start();
         try {
@@ -54,8 +61,8 @@ public class ThreadMain {
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
-        System.out.println("主线程在执行任务");
-
+        System.out.println(Thread.currentThread().getName() + "主线程在执行任务");
+        
         try {
             // fixme:FutureTask 的介绍补充
             //取得新创建的线程中的call()方法返回的结果
