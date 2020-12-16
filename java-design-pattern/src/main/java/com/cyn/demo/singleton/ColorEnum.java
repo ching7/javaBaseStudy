@@ -8,19 +8,22 @@ package com.cyn.demo.singleton;
  * @Date 2020/4/14 19:25
  * @Author: chenyn22577
  * @Version: 1.0
- * @Description:
- *
- * 枚举类
+ * @Description: 枚举类
  * 1、构造方法默认是private
  **/
 public enum ColorEnum {
+
     /**
      *
      */
-    RED("红色", "1",123),
-    GREEN("绿色", "2",2),
-    BLANK("白色", "3",3),
-    YELLO("黄色", "4",4);
+    RED("红色", "1", 123),
+
+    GREEN("绿色", "2", 2),
+
+    BLANK("白色", "3", 3),
+
+    YELLO("黄色", "4", 4);
+
     /**
      * 成员变量
      */
@@ -28,7 +31,9 @@ public enum ColorEnum {
     private String index;
     private int isndex;
 
+
     private ColorEnum(String name, String index, int isndex) {
+
         this.name = name;
         this.index = index;
         this.isndex = isndex;
@@ -41,5 +46,29 @@ public enum ColorEnum {
                 ", index='" + index + '\'' +
                 ", isndex=" + isndex +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
+    public int getIsndex() {
+        return isndex;
+    }
+
+    public void setIsndex(int isndex) {
+        this.isndex = isndex;
     }
 }

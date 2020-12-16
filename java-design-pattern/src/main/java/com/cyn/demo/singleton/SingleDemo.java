@@ -1,5 +1,7 @@
 package com.cyn.demo.singleton;
 
+import static com.cyn.demo.singleton.ColorEnum.GREEN;
+
 /**
  * 文件描述
  *
@@ -17,5 +19,9 @@ public class SingleDemo {
         dclSingleton.putMessage();
         EnumSingleton enumSingleton = EnumSingleton.INSTANCE;
         enumSingleton.whateverMethod();
+
+        //枚举
+        ColorEnum green = GREEN;
+        green.getName();
     }
 }
