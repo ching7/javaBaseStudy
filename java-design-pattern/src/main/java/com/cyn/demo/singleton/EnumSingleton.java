@@ -1,5 +1,7 @@
 package com.cyn.demo.singleton;
 
+import com.cyn.demo.singleton.demo.CommandBean;
+
 /**
  * 文件描述
  *
@@ -26,6 +28,27 @@ public enum  EnumSingleton {
      *
      */
     INSTANCE;
+
+    /**
+     * CacheFileUtil实体
+     */
+    private final CommandBean instance;
+
+    /**
+     * 枚举构造方式
+     */
+    EnumSingleton() {
+        this.instance = new CommandBean();
+    }
+
+    /**
+     * 获取单实例接口
+     *
+     * @return
+     */
+    public CommandBean getInstance() {
+        return instance;
+    }
 
     /**
      *
