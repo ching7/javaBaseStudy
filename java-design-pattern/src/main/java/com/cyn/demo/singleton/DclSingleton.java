@@ -27,6 +27,7 @@ public class DclSingleton {
     private volatile static DclSingleton dclSingleton;
 
     private DclSingleton() {
+        System.out.println(Thread.currentThread().getName() + "\t DclSingleton construct");
     }
 
     public static DclSingleton getInstance() {
