@@ -18,10 +18,14 @@ public class SingleDemo {
     public static void main(String[] args) {
         //DclSingleton dclSingleton = new DclSingleton();
         // DCL单例
-        DclSingleton dclSingleton = DclSingleton.getInstance();
-        dclSingleton.putMessage();
-        EnumSingleton enumSingleton = EnumSingleton.INSTANCE;
-        enumSingleton.whateverMethod();
+        // DclSingleton dclSingleton = DclSingleton.getInstance();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                DclSingleton.getInstance();
+            }, String.valueOf(i)).start();
+        }
+
+
 
         //枚举
         ColorEnum green = GREEN;

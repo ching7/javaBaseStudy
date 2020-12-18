@@ -41,8 +41,4 @@ public class DclSingleton {
         }
         return dclSingleton;
     }
-
-    public void putMessage() {
-        System.out.println("单例初始化");
-    }
 }

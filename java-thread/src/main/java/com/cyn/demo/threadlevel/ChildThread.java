@@ -1,4 +1,4 @@
-package com.cyn.demo.Threadlevel;
+package com.cyn.demo.threadlevel;
 
 import java.util.concurrent.TimeUnit;
 
