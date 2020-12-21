@@ -11,6 +11,8 @@ import java.util.StringJoiner;
 /**
  * @author chenyanan
  * Created by chenyanan on 2020/12/15
+ * <p>
+ * 序列化问题
  */
 public class ModelBySerialize {
     public static void main(String[] args) throws JsonProcessingException {

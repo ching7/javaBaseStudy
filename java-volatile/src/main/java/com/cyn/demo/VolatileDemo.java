@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by chenyanan on 2020/12/17
  *
  * <p>
- * 即当前线程的修改可以被其他线程知晓
+ * 保证可见性\不保证原子性\禁止指令重排
  */
 public class VolatileDemo {
     public static void main(String[] args) {
