@@ -11,12 +11,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FairLockDemo {
     /**
      * true 表示 ReentrantLock 的公平锁
+     * 顺序获得锁
      */
-    private ReentrantLock failLock = new ReentrantLock(true);
+    private final ReentrantLock failLock = new ReentrantLock(true);
     /**
      * true 表示 ReentrantLock 的非公平锁
+     * 非顺序获得锁，某一时间段可能一直被一个线程持有锁
      */
-    private ReentrantLock unfailLock = new ReentrantLock(false);
+    private final ReentrantLock unFailLock = new ReentrantLock(false);
 
     public static void main(String[] args) {
         fairLockTest();
@@ -44,7 +46,6 @@ public class FairLockDemo {
     }
 
     public void testFail() {
-        // 顺序获得锁
         while (true) {
             failLock.lock();
             try {
@@ -57,13 +58,12 @@ public class FairLockDemo {
     }
 
     public void testUnFail() {
-        // 非顺序获得锁，某一时间段可能一直被一个线程持有锁
         while (true) {
-            unfailLock.lock();
+            unFailLock.lock();
             try {
                 System.out.println("===" + Thread.currentThread().getName() + "\t 获得锁");
             } finally {
-                unfailLock.unlock();
+                unFailLock.unlock();
             }
         }
 
