@@ -8,7 +8,10 @@ package com.cyn.demo.threadcommunity;
  * @Date 2020/4/20 16:17
  * @Author: chenyn22577
  * @Version: 1.0
- * @Description: note
+ * 线程通信
+ * wait notify sync
+ * <p>
+ * await singal lock
  **/
 public class ThreadTest {
     public static void main(String[] args) {
