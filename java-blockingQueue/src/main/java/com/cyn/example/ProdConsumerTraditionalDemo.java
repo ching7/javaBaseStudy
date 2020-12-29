@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 传统消费者生产者模型
  * 问题：变量初始值为0，两个线程交替操作，一个+1 ，一个-1。重复5次
  * 1 线程 操作 资源类
+ * 注意：线程唤醒判断需要用while，防止虚假唤醒
  */
 public class ProdConsumerTraditionalDemo {
     public static void main(String[] args) {
