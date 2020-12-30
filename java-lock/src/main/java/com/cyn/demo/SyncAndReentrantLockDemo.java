@@ -44,10 +44,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SyncAndReentrantLockDemo {
     public static void main(String[] args) {
         // 查看字节码，查看区别
-        synchronized (new Object()) {
+ /*       synchronized (new Object()) {
 
         }
-        new ReentrantLock();
+        new ReentrantLock();*/
 
         ShareResource shareResource = new ShareResource();
         new Thread(() -> {
