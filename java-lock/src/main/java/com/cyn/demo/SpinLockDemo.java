@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * 自旋锁
  * <p>
  * 通过while循环，不断重试，实际没加锁（即代码无lock类）
+ * 基于CAS
  */
 public class SpinLockDemo {
     //原子引用线程

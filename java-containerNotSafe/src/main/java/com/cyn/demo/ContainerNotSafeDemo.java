@@ -18,7 +18,7 @@ public class ContainerNotSafeDemo {
     }
 
     public static void mapNotSafe() {
-        // Map<Object, Object> Map = new HashMap<>();
+        //Map<Object, Object> Map = new HashMap<>();
         // Map<Object, Object> Map = new Hashtable<>();
         Map<Object, Object> Map = new ConcurrentHashMap<>();
         // Map<Object, Object> Map = Collections.synchronizedMap(new HashMap<>());
@@ -26,7 +26,7 @@ public class ContainerNotSafeDemo {
             int finalI = i;
             new Thread(() -> {
                 Map.put(finalI, UUID.randomUUID().toString().substring(0, 8));
-                System.out.println("===" + Map);
+                System.out.println("===" + Map + " size：" + Map.size());
             }, String.valueOf(i)).start();
         }
         /** java.util.ConcurrentModificationException
@@ -48,7 +48,7 @@ public class ContainerNotSafeDemo {
         for (int i = 0; i < 40; i++) {
             new Thread(() -> {
                 set.add(UUID.randomUUID().toString().substring(0, 8));
-                System.out.println("===" + set);
+                System.out.println("===" + set + " size：" + set.size());
             }, String.valueOf(i)).start();
         }
         /** java.util.ConcurrentModificationException
@@ -70,7 +70,7 @@ public class ContainerNotSafeDemo {
         for (int i = 0; i < 40; i++) {
             new Thread(() -> {
                 list.add(UUID.randomUUID().toString().substring(0, 8));
-                System.out.println("===" + list);
+                System.out.println("===" + list + " size：" + list.size());
             }, String.valueOf(i)).start();
         }
         /** java.util.ConcurrentModificationException

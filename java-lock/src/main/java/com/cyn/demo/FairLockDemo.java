@@ -7,6 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by chenyanan on 2020/12/22
  * <p>
  * 公平/非公平锁FairSync
+ * 公平锁：多个线程按照申请锁的顺序来获取锁
+ * 非公平锁：多个线程获取锁的顺序并不是按照申请锁的顺序，有可能后申请的线程比先申请的线程
+ * 优先获取锁，可能会出现优先级反转，或者是饥饿现象（可能存在线程一直获取不到锁）
  */
 public class FairLockDemo {
     /**

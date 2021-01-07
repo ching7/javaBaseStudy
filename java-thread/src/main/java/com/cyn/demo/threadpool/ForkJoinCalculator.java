@@ -51,6 +51,7 @@ public class ForkJoinCalculator implements Calculator {
     }
 
     public ForkJoinCalculator() {
+        ForkJoinPool.commonPool();
         // 也可以使用公用的线程池 ForkJoinPool.commonPool()：
         // pool = ForkJoinPool.commonPool()
         pool = new ForkJoinPool();
