@@ -14,13 +14,18 @@ public class ContainerNotSafeDemo {
     public static void main(String[] args) {
         // listNotSafe();
         // setNotSafe();
-        mapNotSafe();
+        // mapNotSafe();
+        String chars = "abcdefghijklmnopqrstuvwxyz";
+        for (int i = 0 ; i < 4; i++){
+            System.out.println(Math.random() * 26);
+            System.out.println(chars.charAt((int) (Math.random() * 26)));
+        }
     }
 
     public static void mapNotSafe() {
         //Map<Object, Object> Map = new HashMap<>();
-        // Map<Object, Object> Map = new Hashtable<>();
-        Map<Object, Object> Map = new ConcurrentHashMap<>();
+         Map<Object, Object> Map = new Hashtable<>();
+        //Map<Object, Object> Map = new ConcurrentHashMap<>();
         // Map<Object, Object> Map = Collections.synchronizedMap(new HashMap<>());
         for (int i = 0; i < 40; i++) {
             int finalI = i;

@@ -25,6 +25,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * A\B原则
  * before使用该技术前
  * after使用技术后
+ * <p>
+ * 题目
+ * 你需要实现一个高效的缓存，它允许多个用户读，但只允许一个用户写，以此来保持它的完整性，你会怎样去实现它？
  */
 public class ReadWriteLockDemo {
     public static void main(String[] args) {
@@ -64,13 +67,14 @@ class MyCache {
             System.out.println("===" + Thread.currentThread().getName() + "\t 正在写入" + key);
             // 线程暂停3s
             TimeUnit.MILLISECONDS.sleep(300);
+            map.put(key, value);
+            System.out.println("===" + Thread.currentThread().getName() + "\t 写入完成" + map);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             rwLock.writeLock().unlock();
         }
-        map.put(key, value);
-        System.out.println("===" + Thread.currentThread().getName() + "\t 写入完成" + map);
+
     }
 
     /**
@@ -84,12 +88,12 @@ class MyCache {
         // 线程暂停3s
         try {
             TimeUnit.MILLISECONDS.sleep(300);
+            Object res = map.get(key);
+            System.out.println("===" + Thread.currentThread().getName() + "\t 读取完成" + res);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             rwLock.readLock().unlock();
         }
-        Object res = map.get(key);
-        System.out.println("===" + Thread.currentThread().getName() + "\t 读取完成" + res);
     }
 }
