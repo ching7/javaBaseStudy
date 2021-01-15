@@ -7,5 +7,8 @@ package com.cyn.demo.bean;
  */
 public interface Gongneng {
     void chifan();
-    void xiaomubiao();
+
+    String xiaomubiao();
+
+    String jianghua(String msg);
 }
