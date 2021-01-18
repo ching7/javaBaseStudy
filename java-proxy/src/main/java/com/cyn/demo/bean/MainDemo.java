@@ -35,7 +35,5 @@ public class MainDemo {
         String jianghua2 = proxyLongzong2.jianghua("讲话内容");
         System.out.println(jianghua2);
 
-        double a = 25/2;
-        System.out.println(a);
     }
 }

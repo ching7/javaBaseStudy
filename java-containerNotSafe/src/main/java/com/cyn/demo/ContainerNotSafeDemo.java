@@ -23,8 +23,8 @@ public class ContainerNotSafeDemo {
     }
 
     public static void mapNotSafe() {
-        //Map<Object, Object> Map = new HashMap<>();
-         Map<Object, Object> Map = new Hashtable<>();
+        Map<Object, Object> Map = new HashMap<>();
+        // Map<Object, Object> Map = new Hashtable<>();
         //Map<Object, Object> Map = new ConcurrentHashMap<>();
         // Map<Object, Object> Map = Collections.synchronizedMap(new HashMap<>());
         for (int i = 0; i < 40; i++) {
