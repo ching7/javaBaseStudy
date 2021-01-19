@@ -1,5 +1,6 @@
 package com.cyn.demo;
 
+import java.lang.ref.SoftReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -16,10 +17,12 @@ public class ContainerNotSafeDemo {
         // setNotSafe();
         // mapNotSafe();
         String chars = "abcdefghijklmnopqrstuvwxyz";
-        for (int i = 0 ; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             System.out.println(Math.random() * 26);
             System.out.println(chars.charAt((int) (Math.random() * 26)));
         }
+        TreeMap treeMap = new TreeMap();
+        treeMap.put("a", "123");
     }
 
     public static void mapNotSafe() {
