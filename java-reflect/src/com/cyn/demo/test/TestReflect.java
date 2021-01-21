@@ -6,6 +6,7 @@ import com.cyn.demo.bean.People;
 /**
  * 文件描述
  *
+ * @author chenyanan
  * @ProjectName: java-reflect
  * @Package: com.cyn.test
  * @Description: note
@@ -21,10 +22,18 @@ public class TestReflect {
         People people = new People();
 
         // 反射创建类对象
-        Class cla =  Class.forName("com.cyn.demo.bean.People");
+        Class cla = Class.forName("com.cyn.demo.bean.People");
         Object obj = cla.newInstance();
         System.out.println(obj.getClass().getPackage());
         System.out.println(obj.getClass().getAnnotation(Deprecated.class));
 
+        //测试自定义由那个类加载器
+        ClassLoader classLoader = Class.forName("com.cyn.demo.bean.People").getClassLoader();
+        System.out.println(classLoader);
+        System.out.println(classLoader.getParent());
+
+        //5.测试JDK提供的Object类由哪个类加载器加载
+        Class<?> aClass = Class.forName("java.lang.String");
+        System.out.println(aClass);
     }
 }
