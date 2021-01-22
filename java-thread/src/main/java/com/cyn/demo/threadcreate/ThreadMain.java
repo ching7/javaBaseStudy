@@ -15,11 +15,11 @@ import java.util.concurrent.*;
 public class ThreadMain {
     public static void main(String[] args) {
         // 方法1
-        /*ThreadDemoByThread threadDemo1 = new ThreadDemoByThread("demo1");
+        ThreadDemoByThread threadDemo1 = new ThreadDemoByThread("demo1");
         ThreadDemoByThread threadDemo2 = new ThreadDemoByThread("demo2");
 
         // 注意run 和start 的区别
-        threadDemo1.run();
+        /*threadDemo1.run();
         threadDemo2.run();
         System.out.println("========");
         threadDemo1.start();
@@ -27,7 +27,7 @@ public class ThreadMain {
         System.out.println("========");*/
 
         // 方法2
-        /*// 创建一个Runnable实现类的对象
+/*        // 创建一个Runnable实现类的对象
         ThreadDemoByRunnable myRunnable = new ThreadDemoByRunnable("A");
         // 将myRunnable作为Thread target创建新的线程
 
@@ -41,7 +41,7 @@ public class ThreadMain {
         // 方法3
         // 1 创建ThreadDemo3对象
         // Callable<Integer> myCallable = new ThreadDemoByCallable();
-        Callable<String> myCallable = () -> {
+       /* Callable<String> myCallable = () -> {
             System.out.println("自定义lambda:" + Thread.currentThread().getName());
             return "自定义lambda";
         };
@@ -69,18 +69,18 @@ public class ThreadMain {
             int sum = 0;
             // isDone不会阻塞当前线程
             // 如果主线程花费时间大于子线程，这里判断为true，可以成功获取值，否则此处为空
-            /*if (ft.isDone()){
+            *//*if (ft.isDone()){
                 sum = ft.get();
-            }*/
+            }*//*
             // get() 会阻塞Blocked当前线程，直到子线程有返回值时，才会Runnable
-            /*int sum = ft.get();*/
+            *//*int sum = ft.get();*//*
             System.out.println("主线程获取task运行结果,sum = " + sum);
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("总共用时" + (System.currentTimeMillis() - startTime) + "ms");
 
-        System.out.println("所有任务执行完毕");
+        System.out.println("所有任务执行完毕");*/
 
     }
 }
