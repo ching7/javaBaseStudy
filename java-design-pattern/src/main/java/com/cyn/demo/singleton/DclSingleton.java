@@ -24,15 +24,14 @@ public class DclSingleton {
     /**
      * 确保编译器不适用缓存，每次重新加载
      */
-    private volatile static DclSingleton dclSingleton;
+    private static volatile DclSingleton dclSingleton;
 
     private DclSingleton() {
-        System.out.println(Thread.currentThread().getName() + "\t DclSingleton construct");
+
     }
 
     public static DclSingleton getInstance() {
         if (dclSingleton == null) {
-            // 确保线程安全
             synchronized (DclSingleton.class) {
                 if (dclSingleton == null) {
                     dclSingleton = new DclSingleton();
