@@ -20,6 +20,7 @@ public class CallByValue {
 
         User user = new User();
         user.setName("cynMain");
+        user.setGender("male");
         changeValue2(user);
         System.out.println("===" + user);
 

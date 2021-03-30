@@ -7,6 +7,7 @@ package com.cyn.demo;
  */
 public interface ActionInter01 {
     void eat01();
+
     public abstract void eat();
 
 }

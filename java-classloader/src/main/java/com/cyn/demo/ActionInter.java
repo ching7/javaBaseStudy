@@ -10,4 +10,5 @@ public interface ActionInter extends ActionInter01, ActionInter02 {
     public static final String NAME = "test";
 
     public abstract void eat();
+
 }
