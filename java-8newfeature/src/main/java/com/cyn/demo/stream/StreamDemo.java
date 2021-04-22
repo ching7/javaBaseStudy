@@ -26,7 +26,7 @@ public class StreamDemo {
         peopleList.add(new People("A", 1));
         peopleList.add(new People("B", 2));
 
-        List<String> filtered = strings.stream()
+        /*List<String> filtered = strings.stream()
                 .filter(string -> !string.isEmpty())
                 .collect(Collectors.toList());
         System.out.println(strings);
@@ -36,7 +36,7 @@ public class StreamDemo {
         // 2.forEach 应用于stream新的方法 'forEach' 来迭代流中的每个数据
         // filtered.forEach(string -> System.out.println(string));
         strings.stream()
-                .forEach(string -> System.out.println(string));
+                .forEach(string -> System.out.println(string));*/
         System.out.println("===============");
 
         // 3.map 用于映射每个元素到对应的结果（对流中的每个元素做操作后返回流）
@@ -48,8 +48,7 @@ public class StreamDemo {
         strings.stream()
                 .map(string -> string + "Map")
                 .peek(s -> {
-                    System.out.println("===s");
-                    s.toUpperCase();
+                    System.out.println(s.toUpperCase());
                 })
                 .forEach(string -> System.out.println(string));
         System.out.println("===============");
@@ -61,7 +60,7 @@ public class StreamDemo {
                 .forEach(people -> System.out.println(people));
 
         // 4.filter 用于通过设置的条件过滤出元素
-        strings.stream()
+        /*strings.stream()
                 .filter(s -> s.contains("b"))
                 .forEach(s -> System.out.println(s));
         System.out.println("===============");
@@ -96,6 +95,6 @@ public class StreamDemo {
         IntSummaryStatistics statistics = numbers.stream()
                 .mapToInt(x -> x)
                 .summaryStatistics();
-        System.out.println(statistics.getAverage());
+        System.out.println(statistics.getAverage());*/
     }
 }
