@@ -6,9 +6,9 @@ package com.cyn.demo;
  */
 public class TestDemo {
     public static void main(String[] args) {
-        for (int i = 1; i <= 5; i++) {
-            System.out.println("===" + CountryEnum.forEachCountryEnum(i).getMessage());
-        }
+//        for (int i = 1; i <= 5; i++) {
+//            System.out.println("===" + CountryEnum.forEachCountryEnum(i).getMessage());
+//        }
         System.out.println("===" + CountryEnum.ONE);
         System.out.println("===" + CountryEnum.ONE.getCode());
         System.out.println("===" + CountryEnum.ONE.getMessage());

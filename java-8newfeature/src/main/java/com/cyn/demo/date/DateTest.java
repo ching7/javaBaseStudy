@@ -1,7 +1,12 @@
 package com.cyn.demo.date;
 
 
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author chenyanan
@@ -10,9 +15,29 @@ import java.util.concurrent.TimeUnit;
  */
 public class DateTest {
     public static void main(String[] args) {
-        DateTest dateTest = new DateTest();
+        //System.out.println(nowDateTime());
+        List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+        AtomicLong offset = new AtomicLong(1000);
+//        long offset2 = 1000;
+//        for (Integer integer : integers) {
+//            System.out.println(integer + " %%%% " + nowDateTimeAdd(offset2));
+//            offset2 = offset2 + 1000;
+//        }
+        integers.forEach(integer -> {
+            System.out.println(integer + " %%%% " + nowDateTimeAdd(offset.get()));
+            offset.getAndAdd(1000);
+        });
+/*        DateTest dateTest = new DateTest();
         dateTest.runOut();
-        dateTest.timeWaitFuc();
+        dateTest.timeWaitFuc();*/
+    }
+
+    public static Date nowDateTimeAdd(long addTime) {
+        return new Timestamp(System.currentTimeMillis() + addTime);
+    }
+
+    public static Date nowDateTime() {
+        return new Timestamp(System.currentTimeMillis());
     }
 
     public void runOut() {
