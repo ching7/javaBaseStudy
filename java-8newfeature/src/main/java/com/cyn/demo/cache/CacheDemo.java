@@ -106,6 +106,10 @@ public class CacheDemo {
         cacheDemo.putloadingCache("001",newMan1);
         man = cacheDemo.getCacheKeyloadingCache("001");
         System.out.println(man);
+
+
+        man = cacheDemo.getCacheKeyloadingCache("001222");
+
     }
 
     public static void testCacheDemo() {
