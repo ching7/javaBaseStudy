@@ -1,5 +1,7 @@
 package com.cyn.demo.threadpool;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -129,19 +131,15 @@ public class JdkDefaultThreadPool {
             tasks.add(i);
         }
 
-        ExecutorService pool = Executors.newFixedThreadPool(20);
+        ExecutorService pool = Executors.newFixedThreadPool(20,new ThreadFactoryBuilder().setNameFormat("JdkDefaultThreadPool-%d").build());
 
         for (Integer task : tasks) {
-            pool.submit(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(500);
-                        System.out.println("task " + task + " end");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                    }
+            pool.submit(() -> {
+                try {
+                    Thread.sleep(500);
+                    System.out.println(Thread.currentThread().getName() +": task " + task + " end");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
 

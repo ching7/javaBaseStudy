@@ -1,5 +1,7 @@
 package com.cyn.demo.threadpool;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import java.util.concurrent.*;
 
 /**
@@ -71,16 +73,16 @@ public class ThreadPool {
                 }, new ThreadPoolExecutor.CallerRunsPolicy());*/
         //7 ThreadPoolExecutor扩展
         // 主要是围绕beforeExecute()、afterExecute()和terminated()三个接口实现的
-        pool = new ThreadPoolExecutor(2, 4, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5),
-                new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        System.out.println("线程" + r.hashCode() + "创建");
-                        //线程命名
-                        Thread th = new Thread(r, "threadPool" + r.hashCode());
-                        return th;
-                    }
-                }, new ThreadPoolExecutor.CallerRunsPolicy()) {
+        ThreadFactory callAnalysisThreadFactory = new ThreadFactoryBuilder()
+                .setNameFormat("threadPool-pool-%d").build();
+        pool = new ThreadPoolExecutor(
+                2,
+                4,
+                1000,
+                TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<Runnable>(5),
+                callAnalysisThreadFactory
+                , new ThreadPoolExecutor.CallerRunsPolicy()) {
 //            @Override
 //            protected void beforeExecute(Thread t, Runnable r) {
 //                System.out.println("准备执行：" + ((ThreadTaskByRunnable) r).getTaskName());
