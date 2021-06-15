@@ -15,6 +15,17 @@ import java.util.Arrays;
 public class LambdaDemo2 {
     public static void main(String[] args) {
         int[] nums = {1, 2, 3, 4, 5};
-        Arrays.stream(nums).forEach(value -> System.out.println(value));
+//        Arrays.stream(nums).forEach(value -> System.out.println(value));
+
+        for (int i :
+                nums) {
+            if (i == 2) {
+                break;
+//                return;
+//                continue;
+            }
+            System.out.println(i);
+        }
+        System.out.println("return");
     }
 }
