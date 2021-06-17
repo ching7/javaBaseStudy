@@ -1,5 +1,7 @@
 package com.cyn.demo.stream;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,15 @@ public class MapStream {
             System.out.println(user);
         });
     }
+
+    @Test
+    public void  getAttribute4Obj(){
+        List<User> list = new ArrayList<>();
+        list.add(new User("王二"));
+        list.add(new User("李四"));
+        List<String> collect = list.stream().map(User::getName).collect(Collectors.toList());
+        System.out.println(collect);
+    }
 }
 
 class User {
@@ -38,5 +49,13 @@ class User {
         return "User{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
