@@ -3,6 +3,7 @@ package com.cyn.demo.date;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,5 +81,12 @@ public class CompareAndFormatDate {
         long res = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
         int abs = Math.abs((int) (res));
 
+    }
+
+    @Test
+    public void formatTime() throws ParseException {
+        String formatStr = new SimpleDateFormat(YYYY_MM_DD).format(new Date());
+        Date parse = new SimpleDateFormat(YYYY_MM_DD).parse(formatStr);
+        System.out.println(parse);
     }
 }

@@ -32,4 +32,9 @@ public class NumFormatAndTransform {
         //结果56.97%
         System.out.println(numberFormat.format(res));
     }
+
+    @Test
+    public void int2Double() {
+        System.out.println((double) 1);
+    }
 }

@@ -24,6 +24,17 @@ public class JsonTestBean {
     @JSONField(name = "s")
     private Integer sex;
 
+
+    private BeanEnum beanEnum;
+
+    public BeanEnum getBeanEnum() {
+        return beanEnum;
+    }
+
+    public void setBeanEnum(BeanEnum beanEnum) {
+        this.beanEnum = beanEnum;
+    }
+
     public String getCustomerName() {
         return customerName;
     }

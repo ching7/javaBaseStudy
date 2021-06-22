@@ -2,6 +2,7 @@ package com.cyn.demo.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.cyn.demo.bean.BeanEnum;
 import com.cyn.demo.bean.JsonTestBean;
 import org.junit.Test;
 
@@ -11,6 +12,12 @@ import org.junit.Test;
  * @CreateTime: 2021-06-09
  */
 public class JsonTest {
+
+    @Test
+    public void beanTestEnum() {
+        JsonTestBean jsonTestBean = new JsonTestBean();
+        System.out.println(jsonTestBean.getBeanEnum());
+    }
 
     @Test
     public void testJsonToStr() {
@@ -33,7 +40,7 @@ public class JsonTest {
         System.out.println(JSON.toJSONString(testBean));
 
         //JSON 转 Bean
-        JsonTestBean entity1 = JSON.parseObject("{'s':1,'c':'张三','p':'1551506609633'}",JsonTestBean.class);
+        JsonTestBean entity1 = JSON.parseObject("{'s':1,'c':'张三','p':'1551506609633'}", JsonTestBean.class);
         System.out.println(entity1.getSex());
     }
 }
