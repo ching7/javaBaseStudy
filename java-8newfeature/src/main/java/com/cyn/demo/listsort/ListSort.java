@@ -1,9 +1,8 @@
 package com.cyn.demo.listsort;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import org.junit.Test;
+
+import java.util.*;
 
 /**
  * @Description: 自定义list排序
@@ -55,5 +54,16 @@ public class ListSort {
         });
         System.out.println("after sort:");
         System.out.println(booleanList);
+    }
+
+    @Test
+    public void testFor() {
+        ArrayList<String> arrayList = new ArrayList<String>();
+        arrayList.add("123");
+        arrayList.add("124");
+        for (int i = 0; i < arrayList.size(); i++) {
+            arrayList.set(i, arrayList.get(i) + "1");
+        }
+        arrayList.forEach(System.out::println);
     }
 }
