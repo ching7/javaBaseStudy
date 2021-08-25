@@ -37,4 +37,10 @@ public class NumFormatAndTransform {
     public void int2Double() {
         System.out.println((double) 1);
     }
+
+    @Test
+    public void plus() {
+        int count  = 1;
+        System.out.println(++count);
+    }
 }
