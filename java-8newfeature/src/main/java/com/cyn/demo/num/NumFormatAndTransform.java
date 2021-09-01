@@ -43,4 +43,9 @@ public class NumFormatAndTransform {
         int count  = 1;
         System.out.println(++count);
     }
+    @Test
+    public void int2Str() {
+        String count  = "09";
+        System.out.println(Integer.parseInt(count));
+    }
 }

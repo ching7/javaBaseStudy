@@ -1,5 +1,7 @@
 package com.cyn.demo;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 
 /**
@@ -21,9 +23,23 @@ public class foreachDemo {
         //
         for (String string : strings) {
             if (string.equals("2")) {
-                return;
+                break;
+                // return;
             }
             System.out.println("===" + string);
         }
+        System.out.println("===");
+
+    }
+
+    @Test
+    public void returnTest(){
+
+        getT();
+        System.out.println("1");
+    }
+
+    public boolean getT(){
+        return false;
     }
 }
