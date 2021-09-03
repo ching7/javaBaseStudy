@@ -10,16 +10,17 @@ import java.util.stream.Stream;
  */
 public class SortMap {
     public static void main(String[] args) {
-        Map<String, String> map = new HashMap();
-        map.put("k", "1");
-        map.put("k3", "3");
-        map.put("k2", "2");
+        Map<String, Long> map = new HashMap();
+        map.put("k", 1L);
+        map.put("k3", 3L);
+        map.put("k2", 2L);
 
-        Map<String, String> stringStringMap = sortByValue2(map);
+        LinkedHashMap<String, Long> stringStringMap = sortByValue(map, false);
+        Set<String> strings = stringStringMap.keySet();
+        List<String> k = new ArrayList<>(strings);
 
-        stringStringMap.forEach((k, v) -> {
-            System.out.println(k + v);
-        });
+        System.out.println(k.get(0));
+        System.out.println(1L/1L);
     }
 
     /**
@@ -49,8 +50,8 @@ public class SortMap {
      * @param map
      * @return
      */
-    private <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, boolean asc) {
-        Map<K, V> result = new LinkedHashMap<>();
+    private static <K, V extends Comparable<? super V>> LinkedHashMap<K, V> sortByValue(Map<K, V> map, boolean asc) {
+        LinkedHashMap<K, V> result = new LinkedHashMap<>();
         Stream<Map.Entry<K, V>> stream = map.entrySet().stream();
         if (asc) //升序
         {
@@ -62,11 +63,11 @@ public class SortMap {
         return result;
     }
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue2(Map<K, V> map) {
+    public static <K, V extends Comparable<? super V>> LinkedHashMap<K, V> sortByValue2(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
         list.sort(Map.Entry.comparingByValue());
 
-        Map<K, V> result = new LinkedHashMap<K, V>();
+        LinkedHashMap<K, V> result = new LinkedHashMap<K, V>();
         for (Map.Entry<K, V> entry : list) {
             result.put(entry.getKey(), entry.getValue());
         }
