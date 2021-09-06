@@ -11,6 +11,16 @@ public class Man {
     //姓名
     private String name;
 
+    private String num;
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
     public String getId() {
         return id;
     }
@@ -32,6 +42,7 @@ public class Man {
         return "Man{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", num='" + num + '\'' +
                 '}';
     }
 }
