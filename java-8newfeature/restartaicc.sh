@@ -1,0 +1,3 @@
+./stopaicc.sh
+./start.sh 
+
