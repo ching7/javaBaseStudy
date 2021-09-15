@@ -1,7 +1,12 @@
 package com.cyn.demo.stringDemo;
 
 import cn.hutool.crypto.digest.MD5;
+import com.alibaba.fastjson.JSONArray;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Description:
@@ -17,5 +22,11 @@ public class StringDemo {
         MD5 md5 = new MD5();
         String s1 = md5.digestHex(t);
         System.out.println(s);
+    }
+
+    @Test
+    public void testString(){
+        String t = "['10086','10087','10088']";
+        JSONArray jsonArray = JSONArray.parseArray(t);
     }
 }
