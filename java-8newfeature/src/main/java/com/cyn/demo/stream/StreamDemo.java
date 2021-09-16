@@ -1,6 +1,7 @@
 package com.cyn.demo.stream;
 
 import com.cyn.demo.bean.People;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,5 +97,13 @@ public class StreamDemo {
                 .mapToInt(x -> x)
                 .summaryStatistics();
         System.out.println(statistics.getAverage());*/
+    }
+
+    @Test
+    public void testCollect(){
+        List<People> peopleList = new ArrayList<>();
+        peopleList.add(new People("A", 1));
+        peopleList.add(new People("B", 2));
+        List<Integer> collect = peopleList.stream().map(People::getAge).collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.cyn.demo.stringDemo;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.alibaba.fastjson.JSONArray;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @Description:
@@ -25,8 +27,13 @@ public class StringDemo {
     }
 
     @Test
-    public void testString(){
+    public void testString() {
         String t = "['10086','10087','10088']";
         JSONArray jsonArray = JSONArray.parseArray(t);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(RandomUtil.randomInt(0, jsonArray.size()));
+        }
+
+
     }
 }
