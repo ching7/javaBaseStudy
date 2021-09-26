@@ -5,10 +5,7 @@ import cn.hutool.crypto.digest.MD5;
 import com.alibaba.fastjson.JSONArray;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Description:
@@ -33,7 +30,18 @@ public class StringDemo {
         for (int i = 0; i < 10; i++) {
             System.out.println(RandomUtil.randomInt(0, jsonArray.size()));
         }
+    }
+    @Test
+    public void testString2() {
+        String t = "['847d97862a3c4bc6beebf7cefef01085','1d4d169203984ffc9e9a6984e2371ce6']";
+        Object parse = JSONArray.parse(t);
+        System.out.println(t);
 
-
+        String t1 = "847d97862a3c4bc6beebf7cefef01085,1d4d169203984ffc9e9a6984e2371ce6";
+        String[] split = t1.split(",");
+        List<String> strings = Arrays.asList(split);
+        String s22 = strings.get(0);
+        System.out.println(s22);
+        System.out.println(strings);
     }
 }
