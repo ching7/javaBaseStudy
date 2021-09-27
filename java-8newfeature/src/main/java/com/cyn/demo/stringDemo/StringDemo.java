@@ -37,7 +37,8 @@ public class StringDemo {
         Object parse = JSONArray.parse(t);
         System.out.println(t);
 
-        String t1 = "847d97862a3c4bc6beebf7cefef01085,1d4d169203984ffc9e9a6984e2371ce6";
+        // String t1 = "847d97862a3c4bc6beebf7cefef01085,1d4d169203984ffc9e9a6984e2371ce6";
+        String t1 = "847d97862a3c4bc6beebf7cefef010856";
         String[] split = t1.split(",");
         List<String> strings = Arrays.asList(split);
         String s22 = strings.get(0);
