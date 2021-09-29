@@ -85,9 +85,12 @@ public class ListSort {
         peopleList.add(peoplea);
         peopleList.add(peopleb);
         // Comparator.comparing 默认为升序
-        peopleList = peopleList.stream().sorted(Comparator.comparing(People::getAge)).collect(Collectors.toList());
+        //peopleList = peopleList.stream().sorted(Comparator.comparing(People::getAge)).collect(Collectors.toList());
 
-        peopleList = peopleList.stream().sorted((o1, o2) -> o2.getAge().compareTo(o1.getAge())).collect(Collectors.toList());
-        System.out.println(peopleList);
+        List<Integer> collect = peopleList.stream()
+                .sorted((o1, o2) -> o2.getAge().compareTo(o1.getAge()))
+                .map(People::getAge)
+                .collect(Collectors.toList());
+        System.out.println(collect);
     }
 }

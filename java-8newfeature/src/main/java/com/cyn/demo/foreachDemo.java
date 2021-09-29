@@ -33,13 +33,19 @@ public class foreachDemo {
     }
 
     @Test
-    public void returnTest(){
-
-        getT();
-        System.out.println("1");
+    public void returnTest() {
+        String[] strings = {"1", "2", "3"};
+        for (String string : strings) {
+            if (string.equals("2")) {
+                //break;
+                // return;
+                continue;
+            }
+            System.out.println("===" + string);
+        }
     }
 
-    public boolean getT(){
+    public boolean getT() {
         return false;
     }
 }
