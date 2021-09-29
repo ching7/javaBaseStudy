@@ -1,8 +1,10 @@
 package com.cyn.demo.listsort;
 
+import com.cyn.demo.bean.People;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 自定义list排序
@@ -72,5 +74,20 @@ public class ListSort {
             arrayList.set(i, arrayList.get(i) + "1");
         }
         arrayList.forEach(System.out::println);
+    }
+
+    @Test
+    public void sortObj() {
+        People peoplea = new People("A", 123);
+        People peopleb = new People("b", 321);
+        List<People> peopleList
+                = new ArrayList<>();
+        peopleList.add(peoplea);
+        peopleList.add(peopleb);
+        // Comparator.comparing 默认为升序
+        peopleList = peopleList.stream().sorted(Comparator.comparing(People::getAge)).collect(Collectors.toList());
+
+        peopleList = peopleList.stream().sorted((o1, o2) -> o2.getAge().compareTo(o1.getAge())).collect(Collectors.toList());
+        System.out.println(peopleList);
     }
 }
