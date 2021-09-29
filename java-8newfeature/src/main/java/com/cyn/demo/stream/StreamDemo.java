@@ -106,4 +106,11 @@ public class StreamDemo {
         peopleList.add(new People("B", 2));
         List<Integer> collect = peopleList.stream().map(People::getAge).collect(Collectors.toList());
     }
+    @Test
+    public void filterCollect(){
+        List<People> peopleList = new ArrayList<>();
+        peopleList.add(new People("A", 1));
+        peopleList.add(new People("B", 2));
+        peopleList = peopleList.stream().filter(people -> people.getName().equals("A")).collect(Collectors.toList());
+    }
 }
