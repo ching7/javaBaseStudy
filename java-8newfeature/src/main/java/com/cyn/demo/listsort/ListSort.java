@@ -14,8 +14,8 @@ public class ListSort {
     static List<Boolean> booleanList = Arrays.asList(true, false, false, true, true);
 
     public static void main(String[] args) {
-//        sortIntList();
-        sortBooleanList();
+        sortIntList();
+        //   sortBooleanList();
 
     }
 
@@ -26,12 +26,19 @@ public class ListSort {
             @Override
             public int compare(Integer o1, Integer o2) {
                 // 返回值为int类型，大于0表示正序，小于0表示逆序
-                System.out.println("o2-o1:" + (o2 - o1) + "========o2=" + o2 + "o1=" + o1);
-                if (o2 > o1) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+                // System.out.println("o2-o1:" + (o2 - o1) + "========o2=" + o2 + "o1=" + o1);
+                // 升序
+                return o1.compareTo(o2);
+                // 倒序
+                // return o2.compareTo(o1);
+
+//                if (o1 > o2) {
+//                    return 1;
+//                } else if (o1 < o2) {
+//                    return -1;
+//                } else {
+//                    return 0;
+//                }
             }
         });
         System.out.println("after sort:");
