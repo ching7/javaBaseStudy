@@ -71,9 +71,14 @@ public class StringDemo {
         strings.add("847d97862a3c4bc6beebf7cefef01085");
         strings.add("1d4d169203984ffc9e9a6984e2371ce6");
         String join = String.join(",", strings);
-        String join1 = Joiner.on(",").join(strings);
+        String join1 = Joiner.on("|").join(strings);
         System.out.println(join);
         System.out.println(join1);
+    }
 
+    @Test
+    public void dateToString() {
+        Date date = new Date();
+        System.out.println(date);
     }
 }
