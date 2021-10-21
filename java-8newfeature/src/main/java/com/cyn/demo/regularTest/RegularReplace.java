@@ -36,7 +36,15 @@ public class RegularReplace {
     public void testRegularReplace() {
         String regex = "\\$\\{.*?\\}";
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher("123${qwqwqweqweqweqweeqwee}123");
+        int matchCount = 0;
+        Matcher matcher = pattern.matcher("123${qwqwqweqweqweqweeqwee}12${77}3");
+        while (matcher.find()) {
+            matchCount++;
+            String group = matcher.group(0);
+            System.out.println(group);
+        }
+        boolean b = matcher.find();
+        String c = matcher.replaceFirst("c");
         String s = matcher.replaceAll("cyn");
     }
 }
