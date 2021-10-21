@@ -80,5 +80,7 @@ public class StringDemo {
     public void dateToString() {
         Date date = new Date();
         System.out.println(date);
+        String s = "1${date},2${year}";
+        System.out.println(s.replace("${date}", "riqi").replace("${year}", "nian"));
     }
 }

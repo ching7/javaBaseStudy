@@ -43,7 +43,6 @@ public class RegularReplace {
             String group = matcher.group(0);
             System.out.println(group);
         }
-        boolean b = matcher.find();
         String c = matcher.replaceFirst("c");
         String s = matcher.replaceAll("cyn");
     }

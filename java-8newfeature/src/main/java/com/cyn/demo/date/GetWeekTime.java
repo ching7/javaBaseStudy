@@ -2,7 +2,10 @@ package com.cyn.demo.date;
 
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,5 +57,27 @@ public class GetWeekTime {
         System.out.println("当前小时：" + calendar.get(Calendar.HOUR_OF_DAY));
         System.out.println("当前分钟：" + calendar.get(Calendar.MINUTE));
 
+    }
+
+    /**
+     * String sdfStr = "hh:mm:ssa, E, MMM, dd, yyyy";
+     * <p>
+     * // E 星期几/英文模式下简写
+     * <p>
+     * // EEE 星期几/英文模式下全名
+     * <p>
+     * // M  数字月份 1-12 (en)
+     * <p>
+     * // MM  数字月份 01-12 (en)
+     * <p>
+     * // MMM  月份简写 Jan (en)
+     * <p>
+     * // MMMM  月份全名 January (en)
+     */
+    @Test
+    public void getChineseDate() {
+        SimpleDateFormat sdf_chs = new SimpleDateFormat("MMMM,dd,E", Locale.SIMPLIFIED_CHINESE);
+        String format = sdf_chs.format(new Date());
+        System.out.println(format);
     }
 }
