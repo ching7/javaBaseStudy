@@ -36,17 +36,13 @@ public class StringDemo {
 
     @Test
     public void testString2() {
-        String t = "['847d97862a3c4bc6beebf7cefef01085','1d4d169203984ffc9e9a6984e2371ce6']";
-        Object parse = JSONArray.parse(t);
-        System.out.println(t);
-
-        // String t1 = "847d97862a3c4bc6beebf7cefef01085,1d4d169203984ffc9e9a6984e2371ce6";
-        String t1 = "847d97862a3c4bc6beebf7cefef010856";
-        String[] split = t1.split(",");
+        String t = "847d97862a3c4bc6beebf7cefef01085,1d4d169203984ffc9e9a6984e2371ce6";
+        String[] split = t.split(",");
         List<String> strings = Arrays.asList(split);
-        String s22 = strings.get(0);
-        System.out.println(s22);
-        System.out.println(strings);
+        for (String s :
+                strings) {
+            System.out.println(s);
+        }
     }
 
     @Test
@@ -65,6 +61,7 @@ public class StringDemo {
         People p = new People("1", 1);
         System.out.println(p.getAge() + 1);
     }
+
     @Test
     public void testString4() {
         List<String> strings = new ArrayList<>();
