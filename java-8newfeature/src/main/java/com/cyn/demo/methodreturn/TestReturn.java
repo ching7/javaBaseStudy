@@ -10,14 +10,27 @@ import org.junit.Test;
 public class TestReturn {
 
     @Test
-    public void testReturn(){
+    public void testReturn() {
         returnMethod("123");
 
         System.out.println("test");
     }
 
-    public String returnMethod(String string){
+    public String returnMethod(String string) {
         System.out.println(string);
         return string;
+    }
+
+    @Test
+    public void testReturn2() {
+        new Thread(() -> {
+            testReturn3();
+        }, "testReturn2").start();
+
+        System.out.println("test");
+    }
+
+    public void testReturn3() {
+        System.out.println("testReturn3");
     }
 }

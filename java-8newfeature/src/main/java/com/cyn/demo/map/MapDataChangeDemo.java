@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Description:
@@ -78,7 +79,50 @@ public class MapDataChangeDemo {
         numberFormat.format(list.get(1).getValue() / list.get(0).getValue());
         System.out.println(list);
 
-        System.out.println(numberFormat.format((double)list.get(1).getValue() / (double)list.get(0).getValue()));
+        System.out.println(numberFormat.format((double) list.get(1).getValue() / (double) list.get(0).getValue()));
 
     }
+
+    @Test
+    public void mapTostr() {
+        Map<String, Integer> map = new ConcurrentHashMap<>();
+        map.put("1", 8);
+        map.put("2", 12);
+        map.put("3", 53);
+        map.put("4", 33);
+        map.put("5", 11);
+        map.put("6", 3);
+        map.put("7", 3);
+        System.out.println(map);
+
+    }
+
+
+    @Test
+    public void testEnum() {
+        CallStatus callStatus = null;
+        callStatus = CallStatus.CALLING;
+        System.out.println(callStatus);
+    }
+}
+
+enum CallStatus {
+    /**
+     * 分配中
+     */
+    LOCKING,
+    /*
+     * 等待中
+     */
+    WAITTING,
+
+    /**
+     * 响铃中
+     */
+    RINGING,
+
+    /**
+     * 通话中
+     */
+    CALLING
 }
