@@ -70,4 +70,14 @@ public class JsonTest {
         CallTemplateQuestion callTemplateQuestion = new CallTemplateQuestion();
         List<CallTemplateQuestion> callTemplateQuestions = JSONObject.parseArray(templateQuestionJson, CallTemplateQuestion.class);
     }
+
+
+    @Test
+    public void testJsonConvert() {
+        // String js = "{\"requestType\":\"register\",\"userName\":\"1011\",\"data\":{\"expireTime\":10}}";
+        String js = "{\"eventType\":\"register\",\"userName\":\"1016\",\"data\":{\"registered\":true}}" ;
+        JSONObject msgObject = JSONObject.parseObject(js);
+        JSONObject data = (JSONObject) msgObject.get("data");
+        Object registered = data.get("registered");
+    }
 }
