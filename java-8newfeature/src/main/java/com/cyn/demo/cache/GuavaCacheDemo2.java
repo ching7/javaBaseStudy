@@ -21,16 +21,13 @@ public class GuavaCacheDemo2 {
 
     public void init() {
         //移除key-value监听器
-        removalListener = new RemovalListener<String, Man>() {
-            @Override
-            public void onRemoval(RemovalNotification<String, Man> notification) {
-                Logger logger = LoggerFactory.getLogger("RemovalListener");
-                System.out.println(notification.getKey() + ":" + notification.getValue() + "被移除");
-                //可以在监听器中获取key,value,和
-                //EXPLICIT、REPLACED、COLLECTED、EXPIRED、SIZE
-                System.out.println("删除原因:" + notification.getCause());
+        removalListener = notification -> {
+            Logger logger = LoggerFactory.getLogger("RemovalListener");
+            System.out.println(notification.getKey() + ":" + notification.getValue() + "被移除");
+            //可以在监听器中获取key,value,和
+            //EXPLICIT、REPLACED、COLLECTED、EXPIRED、SIZE
+            System.out.println("删除原因:" + notification.getCause());
 
-            }
         };
         //可以使用RemovalListeners.asynchronous方法将移除监听器设为异步方法
         //removalListener = RemovalListeners.asynchronous(removalListener, new ThreadPoolExecutor(1,1,1000, TimeUnit.MINUTES,new ArrayBlockingQueue<Runnable>(1)));

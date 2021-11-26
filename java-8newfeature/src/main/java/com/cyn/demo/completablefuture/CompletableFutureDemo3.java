@@ -18,12 +18,8 @@ public class CompletableFutureDemo3 {
     public static void main(String[] args) throws Exception {
         Instant start = Instant.now();
         // 两个CompletableFuture执行异步查询:
-        CompletableFuture<String> cfQueryFromSina = CompletableFuture.supplyAsync(() -> {
-            return queryCode("中国石油", "https://finance.sina.com.cn/code/");
-        });
-        CompletableFuture<String> cfQueryFrom163 = CompletableFuture.supplyAsync(() -> {
-            return queryCode("中国石油", "https://money.163.com/code/");
-        });
+        CompletableFuture<String> cfQueryFromSina = CompletableFuture.supplyAsync(() -> queryCode("中国石油", "https://finance.sina.com.cn/code/"));
+        CompletableFuture<String> cfQueryFrom163 = CompletableFuture.supplyAsync(() -> queryCode("中国石油", "https://money.163.com/code/"));
 
         // 用anyOf合并为一个新的CompletableFuture:
         CompletableFuture<Object> cfQuery = CompletableFuture.anyOf(cfQueryFromSina, cfQueryFrom163);
