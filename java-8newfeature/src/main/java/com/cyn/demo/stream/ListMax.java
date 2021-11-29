@@ -2,7 +2,6 @@ package com.cyn.demo.stream;
 
 import com.cyn.demo.bean.Man;
 import org.junit.Test;
-import sun.management.Sensor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
