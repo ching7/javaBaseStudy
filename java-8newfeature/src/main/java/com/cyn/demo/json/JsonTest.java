@@ -75,9 +75,18 @@ public class JsonTest {
     @Test
     public void testJsonConvert() {
         // String js = "{\"requestType\":\"register\",\"userName\":\"1011\",\"data\":{\"expireTime\":10}}";
-        String js = "{\"eventType\":\"register\",\"userName\":\"1016\",\"data\":{\"registered\":true}}" ;
+        String js = "{\"eventType\":\"register\",\"userName\":\"1016\",\"data\":{\"registered\":true}}";
+
         JSONObject msgObject = JSONObject.parseObject(js);
         JSONObject data = (JSONObject) msgObject.get("data");
         Object registered = data.get("registered");
+    }
+
+    @Test
+    public void testJsonConvert2() {
+        String jsonObject = "{\"agent_no\":\"1015\",\"caller_number\":\"1017\",\"msg_type\":\"AgentStatus\",\"status\":0,\"reason\":\"NO_ANSWER\",\"timestamp\":\"2021-12-22 14:21:45\",\"uuid\":\"5044e2d0-62ee-11ec-8d37-6d7f5b23cf07\"}";
+        JSONObject msgObject = JSONObject.parseObject(jsonObject);
+        String reason = msgObject.getString("reason");
+        System.out.println("NO_ANSWER".equals(reason));
     }
 }
