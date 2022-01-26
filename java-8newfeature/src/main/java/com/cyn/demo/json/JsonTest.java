@@ -89,4 +89,9 @@ public class JsonTest {
         String reason = msgObject.getString("reason");
         System.out.println("NO_ANSWER".equals(reason));
     }
+
+    @Test
+    public void testJsonConvert3() {
+        String jsonObject = "[{\"text\":\"playover\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":9,\"confidence\":\"\",\"promptText\":null,\"promptWav\":null},{\"text\":\"没有。\",\"questionStd\":\"没意见\",\"slots\":{},\"interIdx\":9,\"confidence\":\"credible\",\"promptText\":\"好的,感谢您对我们工作的支持，祝您生活愉快，再见。\",\"promptWav\":\"满意度没有意见\"},{\"text\":\"playover\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":8,\"confidence\":\"\",\"promptText\":\"[p0]\",\"promptWav\":\"空节点\"},{\"text\":\"非常满意。\",\"questionStd\":\"非常满意\",\"slots\":{},\"interIdx\":7,\"confidence\":\"credible\",\"promptText\":\"感谢您对我们服务的认可，请问您对市民卡今后的服务还有什么意见和建议吗？\",\"promptWav\":\"满意度非常满意\"},{\"text\":\"1\",\"questionStd\":\"理财肯定\",\"slots\":{},\"interIdx\":6,\"confidence\":\"acceptable\",\"promptText\":\"打扰您1分钟时间，我们想对您2021年12月23日在萧山大厅办理的成人市民卡补换业务做个简单的满意度调研，请您对工作人员的服务做一下评价，您可以选择说“非常满意、满意、一般、不满意或者非常不满意”。\",\"promptWav\":\"满意度超时1\"},{\"text\":\"playover\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":5,\"confidence\":\"\",\"promptText\":\"[p0]\",\"promptWav\":\"空节点\"},{\"text\":\"嗯是的。\",\"questionStd\":\"理财肯定\",\"slots\":{},\"interIdx\":4,\"confidence\":\"credible\",\"promptText\":\"打扰您1分钟时间，我们想对您2021年12月23日在萧山大厅办理的成人市民卡补换业务做个简单的满意度调研，请您对工作人员的服务做一下评价，您可以选择说“非常满意、满意、一般、不满意或者非常不满意”。\",\"promptWav\":\"萧山满意度回访\"},{\"text\":\"playover\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":3,\"confidence\":\"\",\"promptText\":\"[p0]\",\"promptWav\":\"空节点\"},{\"text\":\"playover\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":2,\"confidence\":\"\",\"promptText\":\"您好，杭州市民卡客户服务中心给您来电，请问您是李泽鑫先生吗？\",\"promptWav\":\"回访身份确认\"},{\"text\":\"\",\"questionStd\":\"\",\"slots\":{},\"interIdx\":1,\"confidence\":\"\",\"promptText\":\"[p10]\",\"promptWav\":\"空节点1\"}]";
+    }
 }
