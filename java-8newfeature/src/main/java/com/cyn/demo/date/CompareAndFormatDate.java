@@ -49,7 +49,6 @@ public class CompareAndFormatDate {
         Date retryCallTime = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
         int i = new Date().compareTo(retryCallTime);
 
-
         Integer i2 = 2;
         Integer i3 = 3;
         Integer i22 = 2;

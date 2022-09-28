@@ -2,6 +2,7 @@ package com.cyn.demo.date;
 
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,5 +86,14 @@ public class DateTimeChangeDemo {
 
          }*/
     }
+    @Test
+    public void t1() throws ParseException {
+        String n = "20220928105615193842";
+        Date date = DateUtils.parseDate(n, DateUtils.YYYYMMDDHHMMSSSSS);
+        String timestamp = String.valueOf(date.getTime());
+        System.out.println(timestamp);
+        String time  = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, date);
+        System.out.println(time);
+     }
 }
 

@@ -1,0 +1,10 @@
+.idea
+*/target
+*.iml
+java-atomic/java-atomic.ipr
+*.iws
+*/**/.DS_Store
+*/**.ipr
+*/**/*.class
+*.kotlin_module
+.DS_Store
