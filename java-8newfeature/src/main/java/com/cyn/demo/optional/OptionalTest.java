@@ -128,4 +128,10 @@ public class OptionalTest {
         User user = new User(20, "lisi");
         return user;
     }
+
+    @Test
+    public void test3() {
+        Optional<User> user = Optional.ofNullable(getUserById(1));
+        user.ifPresent(u -> System.out.println("Username is: " + u.getUserName()));
+    }
 }

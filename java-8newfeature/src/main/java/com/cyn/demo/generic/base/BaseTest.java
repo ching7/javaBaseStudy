@@ -1,9 +1,13 @@
 package com.cyn.demo.generic.base;
 
+import com.cyn.demo.bean.error.ErrorConsts;
+import com.cyn.demo.bean.error.ExceptionEnum;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cyn.demo.bean.error.ErrorConstants.ERR_AICC_PHONE_CALL_FAIL;
 
 /**
  * @Description: 泛型有三种使用方式，分别为：泛型类、泛型接口、泛型方法
@@ -37,9 +41,13 @@ public class BaseTest {
 
     @Test
     public void tGenericInterface() {
-        TGenericInterface<String> tGenericInterface = new TGenericImpl();
-        String next = tGenericInterface.next();
-        System.out.println(next);
+        //TGenericInterface<String> tGenericInterface = new TGenericImpl();
+        //String next = tGenericInterface.next();
+        //System.out.println(ERR_AICC_PHONE_CALL_FAIL + ErrorConsts.errorNoMap.get(ERR_AICC_PHONE_CALL_FAIL));
+        System.out.println(ExceptionEnum.COMMON_IO_EXCEPTION);
+
+        System.out.println(ExceptionEnum.COMMON_IO_EXCEPTION.getResultCode() + " : " + ExceptionEnum.COMMON_IO_EXCEPTION.getResultMsg());
+
     }
 
 }

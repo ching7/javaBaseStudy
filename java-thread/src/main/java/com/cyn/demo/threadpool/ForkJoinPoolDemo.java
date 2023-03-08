@@ -41,7 +41,7 @@ public class ForkJoinPoolDemo implements Calculator{
         System.out.println("方案二结果为：" + resul2t);*/
 
         // 方案3
-        /*Instant start3 = Instant.now();
+        Instant start3 = Instant.now();
         long d=0L;
         for (long i = 0; i < 10000000000L; i++) {
             d = d+i;
@@ -49,7 +49,7 @@ public class ForkJoinPoolDemo implements Calculator{
         Instant end3 = Instant.now();
         System.out.println("方案3耗时：" + Duration.between(start3, end3).toMillis() + "ms");
         // 打印结果500500
-        System.out.println("方案3结果为：" + d);*/
+        System.out.println("方案3结果为：" + d);
 
         // 方案4 ForkJoinPool 的实现方法。
         long[] numbers2 = LongStream.rangeClosed(1, 100000000).toArray();
