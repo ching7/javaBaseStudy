@@ -1,5 +1,7 @@
 package com.cyn.demo.thread;
 
+import com.cyn.demo.thread.bean.TestBean;
+
 /**
  * @author chenyanan
  * Created by chenyanan on 2021/1/7
@@ -14,12 +16,28 @@ public class ThreadLocalDemo {
             return 0;
         }
     };
+    private static ThreadLocal<TestBean> testBean = new ThreadLocal<TestBean>() {
+        @Override
+        protected TestBean initialValue() {
+            return new TestBean();
+        }
+    };
 
     //更新值
     public int getNextNum() {
         num.set(num.get() + 1);
         return num.get();
     }
+
+    public TestBean getTestBean(String name) {
+        int newAge = testBean.get().getAge() + 1;
+        testBean.get().setAge(newAge);
+        testBean.get().setName(name);
+
+        testBean.set(testBean.get());
+        return testBean.get();
+    }
+
 
     /**
      * 官方解释：
@@ -31,5 +49,6 @@ public class ThreadLocalDemo {
      */
     public void removeNum() {
         num.remove();
+        testBean.remove();
     }
 }
