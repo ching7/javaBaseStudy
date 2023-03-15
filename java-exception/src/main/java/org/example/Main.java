@@ -21,6 +21,8 @@ public class Main {
             String i = a.toString();
         } catch (Exception e) {
             logger.info("yi chang le:" + e);
+
+            logger.error("yi chang le:" + e, e);
             e.printStackTrace();
 
         }

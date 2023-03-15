@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
-    <property name="LOG_HOME" value="/Users/chenyanan/Desktop/logs"/>
+    <property name="LOG_HOME" value="./logs"/>
     <property name="PROJECT_NAME" value="java-exception"/>
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
