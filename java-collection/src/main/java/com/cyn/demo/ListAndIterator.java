@@ -1,5 +1,8 @@
 package com.cyn.demo;
 
+import org.junit.Test;
+
+import java.text.Collator;
 import java.util.*;
 
 /**
@@ -25,5 +28,16 @@ public class ListAndIterator {
         while (iterator.hasNext()) {
             System.out.println("===" + mapDemo.get(iterator.next()));
         }
+    }
+    @Test
+    public void test(){
+        List<String> stringList = Arrays.asList("a李四", "b阿毛", "老王", "小李", "小董");
+        stringList.sort((x,y)->{
+            Collator instance = Collator.getInstance(Locale.CHINA);
+            return instance.compare(x, y);
+        } );
+        System.out.println("------------------------------------");
+        stringList.forEach(System.out::println);
+
     }
 }
